@@ -538,3 +538,39 @@
 [1028/132251.799:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
 [1028/132349.393:INFO:CONSOLE(1)] "Canvas2D: Multiple readback operations using getImageData are faster with the willReadFrequently attribute set to true. See: https://html.spec.whatwg.org/multipage/canvas.html#concept-canvas-will-read-frequently", source: https://r.bing.com/rp/PgZslZuu2vcwiZciV_22IQq3Ajk.br.js (1)
 [1028/135348.839:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1030/150734.030:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1030/150819.845:INFO:CONSOLE(1)] "Uncaught Error: Invalid latitude", source: https://r.bing.com/rp/5yHUNpWKeyhvVzGZdODWEUhY5Zo.br.js (1)
+[1030/150906.608:INFO:CONSOLE(1)] "Canvas2D: Multiple readback operations using getImageData are faster with the willReadFrequently attribute set to true. See: https://html.spec.whatwg.org/multipage/canvas.html#concept-canvas-will-read-frequently", source: https://r.bing.com/rp/PgZslZuu2vcwiZciV_22IQq3Ajk.br.js (1)
+[1030/161525.209:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1030/161634.205:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1030/161713.643:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1030/161740.543:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1030/161900.104:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1030/161916.226:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1030/161936.680:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1030/172857.316:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1030/172910.793:INFO:CONSOLE(1)] "Uncaught Error: Invalid latitude", source: https://r.bing.com/rp/5yHUNpWKeyhvVzGZdODWEUhY5Zo.br.js (1)
+[1030/172912.056:INFO:CONSOLE(1)] "Uncaught Error: Invalid latitude", source: https://r.bing.com/rp/5yHUNpWKeyhvVzGZdODWEUhY5Zo.br.js (1)
+[1030/172913.258:INFO:CONSOLE(1)] "Uncaught Error: Invalid latitude", source: https://r.bing.com/rp/5yHUNpWKeyhvVzGZdODWEUhY5Zo.br.js (1)
+[1030/173009.887:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1030/173017.073:INFO:CONSOLE(1)] "Uncaught Error: Invalid latitude", source: https://r.bing.com/rp/5yHUNpWKeyhvVzGZdODWEUhY5Zo.br.js (1)
+[1030/173040.300:INFO:CONSOLE(1)] "Uncaught Error: Invalid latitude", source: https://r.bing.com/rp/5yHUNpWKeyhvVzGZdODWEUhY5Zo.br.js (1)
+[1030/173409.858:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1030/173423.090:INFO:CONSOLE(1)] "Uncaught Error: Invalid latitude", source: https://r.bing.com/rp/5yHUNpWKeyhvVzGZdODWEUhY5Zo.br.js (1)
+[1030/173803.429:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1030/173808.198:INFO:CONSOLE(1)] "Uncaught Error: Invalid latitude", source: https://r.bing.com/rp/5yHUNpWKeyhvVzGZdODWEUhY5Zo.br.js (1)
+[1030/173816.830:INFO:CONSOLE(1)] "Uncaught Error: Invalid latitude", source: https://r.bing.com/rp/5yHUNpWKeyhvVzGZdODWEUhY5Zo.br.js (1)
+[1030/173830.439:INFO:CONSOLE(1)] "Uncaught Error: Invalid latitude", source: https://r.bing.com/rp/5yHUNpWKeyhvVzGZdODWEUhY5Zo.br.js (1)
+[1030/173835.447:INFO:CONSOLE(1)] "Uncaught Error: Invalid latitude", source: https://r.bing.com/rp/5yHUNpWKeyhvVzGZdODWEUhY5Zo.br.js (1)
+[1030/173838.608:INFO:CONSOLE(1)] "Uncaught Error: Invalid latitude", source: https://r.bing.com/rp/5yHUNpWKeyhvVzGZdODWEUhY5Zo.br.js (1)
+[1030/174045.770:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1030/174053.098:INFO:CONSOLE(1)] "Uncaught Error: Invalid latitude", source: https://r.bing.com/rp/5yHUNpWKeyhvVzGZdODWEUhY5Zo.br.js (1)
+[1030/174225.387:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1030/174435.593:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1030/174443.405:INFO:CONSOLE(1)] "Uncaught Error: Invalid latitude", source: https://r.bing.com/rp/5yHUNpWKeyhvVzGZdODWEUhY5Zo.br.js (1)
+[1030/174445.524:INFO:CONSOLE(1)] "Uncaught Error: Invalid latitude", source: https://r.bing.com/rp/5yHUNpWKeyhvVzGZdODWEUhY5Zo.br.js (1)
+[1030/174816.789:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1030/175023.054:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1030/175033.778:INFO:CONSOLE(1)] "Canvas2D: Multiple readback operations using getImageData are faster with the willReadFrequently attribute set to true. See: https://html.spec.whatwg.org/multipage/canvas.html#concept-canvas-will-read-frequently", source: https://r.bing.com/rp/PgZslZuu2vcwiZciV_22IQq3Ajk.br.js (1)
+[1030/175758.019:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1030/175832.135:INFO:CONSOLE(1)] "Canvas2D: Multiple readback operations using getImageData are faster with the willReadFrequently attribute set to true. See: https://html.spec.whatwg.org/multipage/canvas.html#concept-canvas-will-read-frequently", source: https://r.bing.com/rp/PgZslZuu2vcwiZciV_22IQq3Ajk.br.js (1)

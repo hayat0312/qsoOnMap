@@ -1254,6 +1254,32 @@ namespace WindowsFormsApp1
             return countryName;
         }
 
+        private (double? lat, double? lng) convertLatLng(Communication com, bool isFrom)
+        {
+            if(isFrom)
+            {
+                if (com.type == 0 || com.type == 15)
+                {
+                    string grid = com.message3;
+                    float ansLng = grid[0] - 65f + 0.1f * float.Parse(grid[2].ToString());
+                    float ansLat = grid[1] - 65f + 0.1f * float.Parse(grid[3].ToString());
+                    double lng = ansLng * 20 - 180 + 1;
+                    double lat = ansLat * 10 - 90 + 0.5d;
+                    return (lat, lng);
+                }
+                else
+                {
+                    return countryLatlng[com.fromCountry];
+
+                }
+            }
+            else
+            {
+                return countryLatlng[com.toCountry];
+            }
+
+        }
+
         private bool ChildApply(int id, string receiver, string sender)
         {
             try
@@ -1356,14 +1382,20 @@ namespace WindowsFormsApp1
             Communication com = comList[int.Parse(itemx.Text)];
             try
             {
-                (double? fromLat, double? fromLng) = countryLatlng[com.fromCountry];
-                if (countryLatlng[com.toCountry] == (null, null))
+                Console.WriteLine("com.fromC:" + com.fromCountry + ", com.toC:" + com.toCountry);
+
+                (double? fromLat, double? fromLng) = convertLatLng(com, true);
+                Console.WriteLine("fromLat:" + fromLat.ToString() + ", fromLng:" + fromLng.ToString());
+                 
+                if (com.type == 0)
                 {
                     cefBrowser.ExecuteScriptAsync("PointCQ(" + fromLat + ", " + fromLng + ")");
                 }
                 else
                 {
-                    (double? toLat, double? toLng) = countryLatlng[com.toCountry];
+                    (double? toLat, double? toLng) = convertLatLng(com, false);
+                    Console.WriteLine("toLat:" + toLat.ToString() + ", toLng:" + toLng.ToString());
+
                     if (caller == allList || caller == detailList)
                     {
                         cefBrowser.ExecuteScriptAsync("DrawLine(" + toLat + " ," + toLng + ", " + fromLat + " ," + fromLng + " , true);");
@@ -1374,9 +1406,10 @@ namespace WindowsFormsApp1
                     }
                 }
             }
-            catch
+            catch(Exception ex)
             {
                 cefBrowser.ExecuteScriptAsync("ClearEntities()");
+                Console.WriteLine("error is" + ex);
             }
         }
     }
