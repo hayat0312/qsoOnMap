@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Bing Maps API</title>
+    <meta charset="utf-8" />
+    <script type='text/javascript'
+      src='https://www.bing.com/api/maps/mapcontrol?callback=GetMap&key=OUFbr0KCZiL9lfq75yMc~iwtEaOWwpffgUz1pzl7Odw~Ash4QSF2avUPgaRftSA8lfY__SwWO0wA83f8OvKpO4P6vGAcmkCm2lT9VW8i5RzR&setLang=ja' 
+      async defer></script>
+
+   <script type='text/javascript'>
+
+       var map;
+
+       function GetMap() {
+           map = new Microsoft.Maps.Map('#myMap', {
+               //center: new Microsoft.Maps.Location(lat, lon),
+               //表示モード(road:普通, aerial:航空写真)
+               //mapTypeId: Microsoft.Maps.MapTypeId.road,
+               zoom: 0,
+               showDashboard: false
+           });
+       }
+
+       function ClearEntities() {
+           map.entities.clear();
+       }
+
+       function PointCQ(lat, lng) {
+           ClearEntities();
+           var location = new Microsoft.Maps.Location(lat, lng);
+           var pin = new Microsoft.Maps.Pushpin(location, {
+               color: "red",
+           });
+           map.entities.push(pin);
+       }
+
+       
+       function DrawLine(toLat, toLng, fromLat, fromLng, isDynamic) { 
+
+           ClearEntities();
+        Microsoft.Maps.loadModule('Microsoft.Maps.SpatialMath', function () {
+            // Create geodesic path locations from Mexico to Tokyo.
+
+            var fromLoc = new Microsoft.Maps.Location(fromLat, fromLng);
+            var toLoc = new Microsoft.Maps.Location(toLat, toLng);
+            const locations = Microsoft.Maps.SpatialMath.getGeodesicPath([toLoc, fromLoc]);
+            const polyline = new Microsoft.Maps.Polyline(locations, {
+                strokeColor: 'red',
+                strokeTickness: 3
+            });
+
+            var distance = Microsoft.Maps.SpatialMath.getDistanceTo(toLoc, fromLoc, Microsoft.Maps.SpatialMath.DistanceUnits.Kilometers);
+
+            var leftDistance = distance;
+
+            var pins = [];
+
+            if (isDynamic) {
+                //execute when allList or detailList clicked.
+                while (leftDistance > 0) {
+                    leftDistance -= distance / 10;
+
+                    var pointLoc = Microsoft.Maps.SpatialMath.getLocationAlongPath(polyline, leftDistance, Microsoft.Maps.SpatialMath.DistanceUnits.Kilometers);
+                    var pin = new Microsoft.Maps.Pushpin(pointLoc, {
+                        color: "red",
+                        visible: false
+                    });
+                    pins.push(pin);
+                }
+                map.entities.push(polyline);
+                map.entities.push(pins);
+
+
+
+                var i = 0;
+                setInterval(() => {
+                    if (i == pins.length) {
+                        pins.map(function (value) {
+                            value.setOptions({ visible: false })
+                        });
+                        i = 0;
+                    }
+                    pins[i].setOptions({ visible: true });
+                    i++;
+                }, 500);
+            }
+            else {
+                //execute when cqList clicked
+
+                while (leftDistance > 0) {
+                    leftDistance -= distance / 10;
+
+                    var pointLoc = Microsoft.Maps.SpatialMath.getLocationAlongPath(polyline, leftDistance, Microsoft.Maps.SpatialMath.DistanceUnits.Kilometers);
+                    var pin = new Microsoft.Maps.Pushpin(pointLoc, {
+                        color: "red",
+                        visible: true
+                    });
+                    pins.push(pin);
+                }
+                map.entities.push(polyline);
+                map.entities.push(pins);
+            }
+
+        });
+    }
+
+    </script>
+</head>
+<body style="margin:0;">
+    <div id="myMap" style="position:relative;width:100%;height:100%;"></div>
+</body>
+</html>
