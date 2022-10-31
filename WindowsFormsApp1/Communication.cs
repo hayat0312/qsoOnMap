@@ -1,9 +1,11 @@
-﻿namespace WindowsFormsApp1
+﻿using System;
+
+namespace WindowsFormsApp1
 {
     internal class Communication
     {
         public int id { get; set; }
-        public string date { get; set; }
+        public DateTime date { get; set; }
         public string frequency { get; set; }
         public int type { get; set; }
         public string message1 { get; set; }

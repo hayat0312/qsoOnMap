@@ -14,6 +14,7 @@ namespace WindowsFormsApp1
         int clicktimes = 0;
         Dictionary<string, string> countryCode;
         Dictionary<string, (double?, double?)> countryLatlng;
+        Dictionary<string, (double?, double?)> callsignLocation;
         string mapHtml = @"C:\Users\ouchi\source\repos\WindowsFormsApp1\WindowsFormsApp1\testMap.html";
         ChromiumWebBrowser cefBrowser;
         CefSettings settings;
@@ -1052,6 +1053,10 @@ namespace WindowsFormsApp1
                 {"Paraguay", (-23.442503, -58.443832)},
                 {"Italy", (41.87194, 12.56738)}
             };
+            callsignLocation = new Dictionary<string, (double?, double?)>()
+            {
+
+            };
         }
 
         private void InitializeAllList()
@@ -1069,9 +1074,9 @@ namespace WindowsFormsApp1
             ColumnHeader columnData = new ColumnHeader();
             ColumnHeader columnDirection = new ColumnHeader();
             columnNumber.Text = "No.";
-            columnNumber.Width = 60;
+            columnNumber.Width = 30;
             columnName.Text = "時刻";
-            columnName.Width = 100;
+            columnName.Width = 110;
             columnType.Text = "周波数";
             columnType.Width = 60;
             columnData.Text = "メッセージ";
@@ -1099,9 +1104,9 @@ namespace WindowsFormsApp1
             ColumnHeader columnDirection = new ColumnHeader();
 
             columnNumber.Text = "No.";
-            columnNumber.Width = 60;
+            columnNumber.Width = 30;
             columnName.Text = "時刻";
-            columnName.Width = 100;
+            columnName.Width = 110;
             columnType.Text = "周波数";
             columnType.Width = 60;
             columnData.Text = "メッセージ";
@@ -1129,9 +1134,9 @@ namespace WindowsFormsApp1
             ColumnHeader columnDirection = new ColumnHeader();
 
             columnNumber.Text = "No.";
-            columnNumber.Width = 60;
+            columnNumber.Width = 30;
             columnName.Text = "時刻";
-            columnName.Width = 100;
+            columnName.Width = 110;
             columnType.Text = "タイプ";
             columnType.Width = 60;
             columnData.Text = "メッセージ";
@@ -1152,7 +1157,8 @@ namespace WindowsFormsApp1
             using (StreamReader sr = new StreamReader(
                 "C:\\Users\\ouchi\\Desktop\\CopyOfAll.txt", Encoding.GetEncoding("Shift_JIS")))
             {
-                for (int all = 0; all < 1000; all++)
+                //for (int i = 0; i < 10000; i++) sr.ReadLine();
+                for (int all = 1; all < 100; all++)
                 {
                     clicktimes++;
                     string line = "";
@@ -1173,7 +1179,13 @@ namespace WindowsFormsApp1
                         com = new Communication
                         {
                             id = clicktimes - 1,
-                            date = property[0],
+                            date = new DateTime(
+                                2000 + int.Parse(property[0].Substring(0, 2)),
+                                int.Parse(property[0].Substring(2, 2)),
+                                int.Parse(property[0].Substring(4, 2)),
+                                int.Parse(property[0].Substring(7, 2)),
+                                int.Parse(property[0].Substring(9, 2)),
+                                int.Parse(property[0].Substring(11, 2))),
                             frequency = property[1],
                             type = type,
                             message1 = property[7],
@@ -1190,7 +1202,13 @@ namespace WindowsFormsApp1
                         com = new Communication
                         {
                             id = clicktimes - 1,
-                            date = "",
+                            date = new DateTime(
+                                2000 + int.Parse(property[0].Substring(0, 2)),
+                                int.Parse(property[0].Substring(2, 2)),
+                                int.Parse(property[0].Substring(4, 2)),
+                                int.Parse(property[0].Substring(7, 2)),
+                                int.Parse(property[0].Substring(9, 2)),
+                                int.Parse(property[0].Substring(11, 2))),
                             frequency = "",
                             type = type,
                             message1 = "",
@@ -1214,49 +1232,58 @@ namespace WindowsFormsApp1
                     {
                         isChild = ChildApply(com.id, com.message1, com.message2);
                     }
-                    string[] appear = { com.id.ToString(), com.date, com.frequency, com.message1 + " " + com.message2 + " " + com.message3, com.toCountry + " <- " + com.fromCountry };
+                    string[] appear = { com.id.ToString(), com.date.ToString(), com.frequency, com.message1 + " " + com.message2 + " " + com.message3, com.toCountry + " <- " + com.fromCountry };
                     allList.Items.Add(new ListViewItem(appear));
                     if (!isChild && com.type != -1)
                     {
                         cqList.Items.Add(new ListViewItem(appear));
                     }
-                    //Console.WriteLine(comList[0].id.ToString());
-                    //await Task.Delay(1000);
 
+
+                    //Console.WriteLine(comList[0].id.ToString());
+                    //await Task.Delay(100);
                 }
             }
         }
 
         private string FindCountry(string callsign)
         {
-            string countryName;
+            try
+            {
+                string countryName;
+                Console.WriteLine(callsign);
 
-            if (callsign == "CQ")
-            {
-                countryName = "All";
+                if (callsign == "CQ")
+                {
+                    countryName = "All";
+                }
+                else if (countryCode.ContainsKey(callsign[0].ToString()))
+                {
+                    countryName = countryCode[callsign[0].ToString()];
+                }
+                else if (countryCode.ContainsKey(callsign[0].ToString() + callsign[1].ToString()))
+                {
+                    countryName = countryCode[callsign[0].ToString() + callsign[1].ToString()];
+                }
+                else if (countryCode.ContainsKey(callsign[0].ToString() + callsign[1].ToString() + callsign[2].ToString()))
+                {
+                    countryName = countryCode[callsign[0].ToString() + callsign[1].ToString() + callsign[2].ToString()];
+                }
+                else
+                {
+                    countryName = "ERROR";
+                }
+                return countryName;
             }
-            else if (countryCode.ContainsKey(callsign[0].ToString()))
+            catch
             {
-                countryName = countryCode[callsign[0].ToString()];
+                return "ERROR";
             }
-            else if (countryCode.ContainsKey(callsign[0].ToString() + callsign[1].ToString()))
-            {
-                countryName = countryCode[callsign[0].ToString() + callsign[1].ToString()];
-            }
-            else if (countryCode.ContainsKey(callsign[0].ToString() + callsign[1].ToString() + callsign[2].ToString()))
-            {
-                countryName = countryCode[callsign[0].ToString() + callsign[1].ToString() + callsign[2].ToString()];
-            }
-            else
-            {
-                countryName = "ERROR";
-            }
-            return countryName;
         }
 
-        private (double? lat, double? lng) convertLatLng(Communication com, bool isFrom)
+        private (double? lat, double? lng) ConvertLatLng(Communication com, bool isFrom)
         {
-            if(isFrom)
+            if (isFrom)
             {
                 if (com.type == 0 || com.type == 15)
                 {
@@ -1265,17 +1292,38 @@ namespace WindowsFormsApp1
                     float ansLat = grid[1] - 65f + 0.1f * float.Parse(grid[3].ToString());
                     double lng = ansLng * 20 - 180 + 1;
                     double lat = ansLat * 10 - 90 + 0.5d;
+                    if (callsignLocation.ContainsKey(com.message2))
+                    {
+                        callsignLocation[com.message2] = (lat, lng);
+                    }
+                    else
+                    {
+                        callsignLocation.Add(com.message2, (lat, lng));
+                    }
                     return (lat, lng);
                 }
                 else
                 {
-                    return countryLatlng[com.fromCountry];
-
+                    if (callsignLocation.ContainsKey(com.message2))
+                    {
+                        return callsignLocation[com.message2];
+                    }
+                    else
+                    {
+                        return countryLatlng[com.fromCountry];
+                    }
                 }
             }
             else
             {
-                return countryLatlng[com.toCountry];
+                if (callsignLocation.ContainsKey(com.message1))
+                {
+                    return callsignLocation[com.message1];
+                }
+                else
+                {
+                    return countryLatlng[com.toCountry];
+                }
             }
 
         }
@@ -1347,7 +1395,7 @@ namespace WindowsFormsApp1
 
         private void Display(Communication com)
         {
-            string[] appear = { com.id.ToString(), com.date, com.type.ToString(), com.message1 + " " + com.message2 + " " + com.message3, com.toCountry + " <- " + com.fromCountry };
+            string[] appear = { com.id.ToString(), com.date.ToString(), com.type.ToString(), com.message1 + " " + com.message2 + " " + com.message3, com.toCountry + " <- " + com.fromCountry };
             detailList.Items.Add(new ListViewItem(appear));
 
             if (com.childId != 0)
@@ -1378,23 +1426,23 @@ namespace WindowsFormsApp1
 
         private void DrawOnMap(object caller, ListViewItem itemx)
         {
-
+            //Console.WriteLine(itemx.Text);
             Communication com = comList[int.Parse(itemx.Text)];
             try
             {
-                Console.WriteLine("com.fromC:" + com.fromCountry + ", com.toC:" + com.toCountry);
+                //Console.WriteLine("com.fromC:" + com.fromCountry + ", com.toC:" + com.toCountry);
 
-                (double? fromLat, double? fromLng) = convertLatLng(com, true);
-                Console.WriteLine("fromLat:" + fromLat.ToString() + ", fromLng:" + fromLng.ToString());
-                 
+                (double? fromLat, double? fromLng) = ConvertLatLng(com, true);
+                //Console.WriteLine("fromLat:" + fromLat.ToString() + ", fromLng:" + fromLng.ToString());
+
                 if (com.type == 0)
                 {
                     cefBrowser.ExecuteScriptAsync("PointCQ(" + fromLat + ", " + fromLng + ")");
                 }
                 else
                 {
-                    (double? toLat, double? toLng) = convertLatLng(com, false);
-                    Console.WriteLine("toLat:" + toLat.ToString() + ", toLng:" + toLng.ToString());
+                    (double? toLat, double? toLng) = ConvertLatLng(com, false);
+                    //Console.WriteLine("toLat:" + toLat.ToString() + ", toLng:" + toLng.ToString());
 
                     if (caller == allList || caller == detailList)
                     {
@@ -1406,10 +1454,10 @@ namespace WindowsFormsApp1
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 cefBrowser.ExecuteScriptAsync("ClearEntities()");
-                Console.WriteLine("error is" + ex);
+                //Console.WriteLine("error is" + ex);
             }
         }
     }
