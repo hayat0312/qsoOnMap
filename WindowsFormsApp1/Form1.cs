@@ -1,6 +1,7 @@
 ﻿using CefSharp;
 using CefSharp.WinForms;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -42,6 +43,8 @@ namespace WindowsFormsApp1
             InitializeAllList();
             InitializeCqList();
             InitializeDetailList();
+
+            AccesserTest();
         }
 
         private void CefBrowser_LoadingStateChanged(object sender, LoadingStateChangedEventArgs e)
@@ -59,6 +62,7 @@ namespace WindowsFormsApp1
 
         private void ResisterCountry()
         {
+            //resister callsign data into Dictionaries
             countryCode = new Dictionary<string, string>()
             {
                 {"HB3Y", "Liechtenstein"},
@@ -1053,6 +1057,7 @@ namespace WindowsFormsApp1
                 {"Paraguay", (-23.442503, -58.443832)},
                 {"Italy", (41.87194, 12.56738)}
             };
+            //resisterd when gridlocator detected
             callsignLocation = new Dictionary<string, (double?, double?)>()
             {
 
@@ -1251,7 +1256,7 @@ namespace WindowsFormsApp1
             try
             {
                 string countryName;
-                Console.WriteLine(callsign);
+                //Console.WriteLine(callsign);
 
                 if (callsign == "CQ")
                 {
@@ -1459,6 +1464,81 @@ namespace WindowsFormsApp1
                 cefBrowser.ExecuteScriptAsync("ClearEntities()");
                 //Console.WriteLine("error is" + ex);
             }
+        }
+
+        private void AccesserTest()
+        {
+            Console.WriteLine(latestComs(DateTime.Now));
+        }
+
+        public static int CountOf(string target, params string[] strArray)
+        {
+            int count = 0;
+
+            foreach (string str in strArray)
+            {
+                int index = target.IndexOf(str, 0);
+                while (index != -1)
+                {
+                    count++;
+                    index = target.IndexOf(str, index + str.Length);
+                }
+            }
+
+            return count;
+        }
+
+        private static string latestComs(DateTime standard)
+        {
+            var ansStr = new ArrayList();
+            string lastRow;
+            using (FileStream fs = new FileStream(@"C:\Users\ouchi\Desktop\testForQSO.txt", FileMode.Open, FileAccess.Read))
+            {
+                var str = "";
+                var index = 0;
+                var bytes = new List<byte>();
+                int param = 0;
+                while (fs.Position >= 0)
+                {
+                    fs.Position = fs.Seek(0, SeekOrigin.End) - index;
+
+                    if (fs.CanSeek)
+                    {
+                        int read;
+                        while ((read = fs.ReadByte()) >= 0)
+                        {
+                            bytes.Add((byte)read);
+                        }
+
+                        str = Encoding.GetEncoding("Shift_JIS").GetString(bytes.ToArray());
+                        if (CountOf(str, "\r\n") != param)
+                        {
+                            string strTime = str.Trim('\r').Trim('\n').Substring(0, 15);
+                            DateTime time = new DateTime(
+                               2000 + int.Parse(strTime.Substring(0, 2)),
+                               int.Parse(strTime.Substring(2, 2)),
+                               int.Parse(strTime.Substring(4, 2)),
+                               int.Parse(strTime.Substring(7, 2)),
+                               int.Parse(strTime.Substring(9, 2)),
+                               int.Parse(strTime.Substring(11, 2)));
+
+                            if (time < standard)
+                            {
+                                break;
+                            }
+                            param = CountOf(str, "\r\n");
+                        }
+                    }
+                    index++;
+                    bytes.Clear();
+                }
+                lastRow = str.Trim('\r').Trim('\n');
+                lastRow = lastRow.Substring(lastRow.IndexOf("\r\n"));
+                lastRow = lastRow.Trim('\r').Trim('\n');
+
+
+            }
+            return lastRow;
         }
     }
 }

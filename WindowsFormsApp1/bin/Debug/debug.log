@@ -869,3 +869,53 @@
 [1031/161614.588:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
 [1031/161615.923:INFO:CONSOLE(1)] "Uncaught Error: Invalid latitude", source: https://r.bing.com/rp/5yHUNpWKeyhvVzGZdODWEUhY5Zo.br.js (1)
 [1031/161909.580:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1108/184445.708:ERROR:component_installer.cc(356)] Failed to read manifest or verify installation for Widevine Content Decryption Module (C:\Users\ouchi\AppData\Local\CEF\User Data\WidevineCdm\4.10.2449.0).: 指定されたパスが見つかりません。 (0x3)
+[1108/184447.152:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1108/184721.910:INFO:CONSOLE(1)] "Canvas2D: Multiple readback operations using getImageData are faster with the willReadFrequently attribute set to true. See: https://html.spec.whatwg.org/multipage/canvas.html#concept-canvas-will-read-frequently", source: https://r.bing.com/rp/PgZslZuu2vcwiZciV_22IQq3Ajk.br.js (1)
+[1109/121806.107:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1109/121822.035:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1109/141410.785:ERROR:block_files.cc(441)] Failed to open GPUCache\data_1
+[1109/141411.205:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1109/141437.573:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1109/141540.521:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1109/141605.879:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1109/141738.740:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1109/141753.144:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1109/141810.965:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1109/144415.543:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1109/144440.778:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1109/144724.584:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1109/144909.877:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1109/144921.031:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1109/144940.099:INFO:CONSOLE(1)] "Canvas2D: Multiple readback operations using getImageData are faster with the willReadFrequently attribute set to true. See: https://html.spec.whatwg.org/multipage/canvas.html#concept-canvas-will-read-frequently", source: https://r.bing.com/rp/PgZslZuu2vcwiZciV_22IQq3Ajk.br.js (1)
+[1109/150937.266:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1109/163853.588:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1109/171735.587:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1109/171741.846:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1109/171753.389:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1109/172346.451:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1109/172400.402:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1109/172409.865:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1109/172433.072:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1109/172444.211:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1109/172648.809:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1109/172733.685:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1109/172756.425:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1109/172827.277:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1109/172945.424:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1109/173336.815:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1109/173447.071:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1109/174810.476:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1109/174841.537:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1109/174900.169:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1109/185201.766:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1109/185307.075:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1109/185525.432:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1109/185610.009:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1109/185620.916:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1109/185956.485:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1109/190047.095:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1109/190105.740:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1109/190130.447:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1109/190146.145:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1109/190232.369:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
