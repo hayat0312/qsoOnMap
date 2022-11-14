@@ -3,7 +3,10 @@ using CefSharp.WinForms;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
+using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
@@ -35,6 +38,7 @@ namespace WindowsFormsApp1
             Cef.Initialize(settings);
             cefBrowser = new ChromiumWebBrowser(mapHtml);
             cefBrowser.LoadingStateChanged += CefBrowser_LoadingStateChanged;
+            cefBrowser.FrameLoadEnd += OnBrowserFrameLoadEnd;
             // Panelに合わせて表示
             mapPanel.Controls.Add(cefBrowser);
             cefBrowser.Dock = DockStyle.Fill;
@@ -43,8 +47,23 @@ namespace WindowsFormsApp1
             InitializeAllList();
             InitializeCqList();
             InitializeDetailList();
+            mapPanel.Height = 300;
+            mapPanel.Width = (int)(mapPanel.Height * 432 / 279);
 
-            AccesserTest();
+            DlIoMap();
+            //AccesserTest();
+        }
+
+        private void OnBrowserFrameLoadEnd(object sender, FrameLoadEndEventArgs args)
+        {
+            if (args.Frame.IsMain)
+            {
+                args
+                    .Browser
+                    .MainFrame
+                    .ExecuteJavaScriptAsync(
+                    "document.body.style.overflow = 'hidden'");
+            }
         }
 
         private void CefBrowser_LoadingStateChanged(object sender, LoadingStateChangedEventArgs e)
@@ -1539,6 +1558,67 @@ namespace WindowsFormsApp1
 
             }
             return lastRow;
+        }
+
+        private void DlIoMap()
+        {
+            var gifPath = "C:\\Users\\ouchi\\source\\repos\\WindowsFormsApp1\\WindowsFormsApp1";
+            WebClient wc = new WebClient();
+            wc.DownloadFile("https://giro.uml.edu/IRTAM/IRTAM_foF2.gif", gifPath + "\\IRTAM_foF2.gif");
+            var format = ImageFormat.Jpeg;
+            var extension = "jpg";
+            Image img = Image.FromFile(gifPath + "\\IRTAM_foF2.gif");
+
+            // 等倍で再生する
+            bool isReady = false;
+            ImageAnimator.Animate(img, (Object o, EventArgs e) => isReady = true);
+
+            var renderTarget = new Bitmap(img.Width, img.Height);
+            using (var g = Graphics.FromImage(renderTarget))
+            {
+
+                var guid = img.FrameDimensionsList[0];
+                var dimension = new System.Drawing.Imaging.FrameDimension(guid);
+                var end = img.GetFrameCount(dimension);
+                for (int i = 0; i < end; ++i)
+                {
+
+                    // Animator が次のフレームを準備できるまで待つ
+                    while (!isReady) { System.Threading.Thread.Sleep(10); }
+                    isReady = false;
+
+                    g.DrawImage(img, 0, 0);
+                    renderTarget.Save(gifPath + string.Format("/{0:0000}.{1}", i, extension), format);
+
+                    ImageAnimator.UpdateFrames(img);
+                }
+            }
+
+
+            // 画像を読み込む
+            Bitmap srcImage = new Bitmap(gifPath + "\\0095.jpg");
+
+            // 画像を切り抜く範囲を指定
+            Rectangle rect = new Rectangle(8, 56, 432, 279);
+            Bitmap destImage = srcImage.Clone(rect, srcImage.PixelFormat);
+
+            // 画像をPNG形式で保存
+            destImage.Save(gifPath + "\\0096.jpg", System.Drawing.Imaging.ImageFormat.Jpeg);
+
+            // 画像リソースを解放
+            srcImage.Dispose();
+            destImage.Dispose();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            cefBrowser.ExecuteScriptAsync("DisplayIo()");
+        }
+
+        private void mapPanel_SizeChanged(object sender, EventArgs e)
+        {
+            mapPanel.Height = 300;
+            mapPanel.Width = (int)(mapPanel.Height*432/279);
         }
     }
 }

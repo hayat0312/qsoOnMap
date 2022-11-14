@@ -13,13 +13,67 @@
 
        function GetMap() {
            map = new Microsoft.Maps.Map('#myMap', {
-               //center: new Microsoft.Maps.Location(lat, lon),
-               //表示モード(road:普通, aerial:航空写真)
-               //mapTypeId: Microsoft.Maps.MapTypeId.road,
-               zoom: 0,
-               showDashboard: false
+               center: new Microsoft.Maps.Location(0, 0),
+               showDashboard: false,
+               disablePanning: true,
+               disableZooming: true,
+               zoom: 1
            });
+
+           //Define a custom overlay class that inherts from the CustomOverlay class.
+           TopographicOverlay.prototype = new Microsoft.Maps.CustomOverlay();
+
+           //Define a constructor for the custom overlay class.
+           function TopographicOverlay(bounds, image) {
+               this.bounds = bounds;
+               this.image = image;
+           }
+
+           //Implement the onAdd method to set up DOM elements, and use setHtmlElement to bind it with the overlay.
+           TopographicOverlay.prototype.onAdd = function () {
+               //Create an image element that will be used as the overlay.
+               img = document.createElement('img');
+               img.src = this.image;
+               img.style.width = '100%';
+               img.style.height = '100%';
+               img.style.position = 'absolute';
+               img.style.opacity = "0.5";
+               this.setHtmlElement(img);
+           };
+
+           //Implement the onLoad method to perform custom operations of rendering the DOM element.
+           TopographicOverlay.prototype.onLoad = function () {
+               repositionOverlay();
+
+               //Update the position of the image when the view changes.
+               Microsoft.Maps.Events.addHandler(map, 'viewchange', function () {
+                   repositionOverlay();
+               });
+           };
+
+           function repositionOverlay() {
+               //Streach and position the image based on the bounding box pixel coordinates.
+               var topLeft = map.tryLocationToPixel(bounds.getNorthwest(), Microsoft.Maps.PixelReference.control);
+               var bottomRight = map.tryLocationToPixel(bounds.getSoutheast(), Microsoft.Maps.PixelReference.control);
+
+               img.style.left = topLeft.x + 'px';
+               img.style.top = topLeft.y + 'px';
+               img.style.width = (bottomRight.x - topLeft.x) + 'px';
+               img.style.width = (bottomRight.x - topLeft.x) + 'px';
+               img.style.height = (bottomRight.y - topLeft.y) + 'px';
+           }
+
+           //The bounding box and url for the image to overlay.
+           var bounds = Microsoft.Maps.LocationRect.fromCorners(new Microsoft.Maps.Location(75, -180), new Microsoft.Maps.Location(-75, 180));
+           var imageSrc = './0096.jpg';
+
+           //Implement the new custom overlay class. 
+           var overlay = new TopographicOverlay(bounds, imageSrc);
+
+           //Add the custom overlay to the map.
+           map.layers.insert(overlay);
        }
+
 
        function ClearEntities() {
            map.entities.clear();
@@ -34,11 +88,10 @@
            map.entities.push(pin);
        }
 
-       
        function DrawLine(toLat, toLng, fromLat, fromLng, isDynamic) { 
 
-           ClearEntities();
-        Microsoft.Maps.loadModule('Microsoft.Maps.SpatialMath', function () {
+            ClearEntities();
+            Microsoft.Maps.loadModule('Microsoft.Maps.SpatialMath', function () {
             // Create geodesic path locations from Mexico to Tokyo.
 
             var fromLoc = new Microsoft.Maps.Location(fromLat, fromLng);
@@ -103,11 +156,13 @@
                 map.entities.push(pins);
             }
         });
-    }
+       }
 
     </script>
 </head>
-<body style="margin:0;">
-    <div id="myMap" style="position:relative;width:100%;height:100%;"></div>
-</body>
+  <body style="margin:0;">
+      
+      <div id="myMap" style="width:100%;height:100%;"></div>
+
+  </body>
 </html>

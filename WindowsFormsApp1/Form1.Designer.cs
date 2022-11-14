@@ -36,20 +36,21 @@
             this.allList = new System.Windows.Forms.ListView();
             this.mapPanel = new System.Windows.Forms.Panel();
             this.toolStripStatusLabel = new System.Windows.Forms.Label();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.detailList = new System.Windows.Forms.ListView();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.button1 = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
-            this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("MS UI Gothic", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.label1.Location = new System.Drawing.Point(671, 556);
+            this.label1.Location = new System.Drawing.Point(670, 557);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(128, 21);
             this.label1.TabIndex = 0;
@@ -57,7 +58,7 @@
             // 
             // showAllButton
             // 
-            this.showAllButton.Location = new System.Drawing.Point(3, 270);
+            this.showAllButton.Location = new System.Drawing.Point(3, 271);
             this.showAllButton.Name = "showAllButton";
             this.showAllButton.Size = new System.Drawing.Size(75, 23);
             this.showAllButton.TabIndex = 1;
@@ -71,7 +72,7 @@
             this.cqList.HideSelection = false;
             this.cqList.Location = new System.Drawing.Point(3, 15);
             this.cqList.Name = "cqList";
-            this.cqList.Size = new System.Drawing.Size(322, 243);
+            this.cqList.Size = new System.Drawing.Size(322, 244);
             this.cqList.TabIndex = 2;
             this.cqList.UseCompatibleStateImageBehavior = false;
             this.cqList.View = System.Windows.Forms.View.Details;
@@ -81,8 +82,8 @@
             // 
             this.tableLayoutPanel1.ColumnCount = 3;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33334F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33334F));
             this.tableLayoutPanel1.Controls.Add(this.groupBox1, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.mapPanel, 1, 1);
             this.tableLayoutPanel1.Controls.Add(this.toolStripStatusLabel, 1, 2);
@@ -90,13 +91,14 @@
             this.tableLayoutPanel1.Controls.Add(this.groupBox2, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.showAllButton, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.label1, 2, 2);
+            this.tableLayoutPanel1.Controls.Add(this.button1, 0, 2);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 3;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 46.04811F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 49.82818F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 4.295533F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 91.46757F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 8.532423F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(1002, 582);
             this.tableLayoutPanel1.TabIndex = 3;
             // 
@@ -106,7 +108,7 @@
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox1.Location = new System.Drawing.Point(3, 3);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(328, 261);
+            this.groupBox1.Size = new System.Drawing.Size(327, 262);
             this.groupBox1.TabIndex = 5;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "All Communications";
@@ -117,7 +119,7 @@
             this.allList.HideSelection = false;
             this.allList.Location = new System.Drawing.Point(3, 15);
             this.allList.Name = "allList";
-            this.allList.Size = new System.Drawing.Size(322, 243);
+            this.allList.Size = new System.Drawing.Size(321, 244);
             this.allList.TabIndex = 3;
             this.allList.UseCompatibleStateImageBehavior = false;
             this.allList.View = System.Windows.Forms.View.Details;
@@ -126,38 +128,28 @@
             // mapPanel
             // 
             this.mapPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mapPanel.Location = new System.Drawing.Point(337, 270);
+            this.mapPanel.Location = new System.Drawing.Point(336, 271);
             this.mapPanel.Name = "mapPanel";
             this.mapPanel.Size = new System.Drawing.Size(328, 283);
             this.mapPanel.TabIndex = 8;
+            this.mapPanel.SizeChanged += new System.EventHandler(this.mapPanel_SizeChanged);
             // 
             // toolStripStatusLabel
             // 
             this.toolStripStatusLabel.AutoSize = true;
-            this.toolStripStatusLabel.Location = new System.Drawing.Point(337, 556);
+            this.toolStripStatusLabel.Location = new System.Drawing.Point(336, 557);
             this.toolStripStatusLabel.Name = "toolStripStatusLabel";
             this.toolStripStatusLabel.Size = new System.Drawing.Size(35, 12);
             this.toolStripStatusLabel.TabIndex = 10;
             this.toolStripStatusLabel.Text = "label2";
             // 
-            // groupBox2
-            // 
-            this.groupBox2.Controls.Add(this.cqList);
-            this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox2.Location = new System.Drawing.Point(337, 3);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(328, 261);
-            this.groupBox2.TabIndex = 6;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "QSO Communications";
-            // 
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.detailList);
             this.groupBox3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox3.Location = new System.Drawing.Point(671, 3);
+            this.groupBox3.Location = new System.Drawing.Point(670, 3);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(328, 261);
+            this.groupBox3.Size = new System.Drawing.Size(329, 262);
             this.groupBox3.TabIndex = 7;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Detail";
@@ -168,10 +160,31 @@
             this.detailList.HideSelection = false;
             this.detailList.Location = new System.Drawing.Point(3, 15);
             this.detailList.Name = "detailList";
-            this.detailList.Size = new System.Drawing.Size(322, 243);
+            this.detailList.Size = new System.Drawing.Size(323, 244);
             this.detailList.TabIndex = 4;
             this.detailList.UseCompatibleStateImageBehavior = false;
             this.detailList.Click += new System.EventHandler(this.DetailList_Click);
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.cqList);
+            this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.groupBox2.Location = new System.Drawing.Point(336, 3);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(328, 262);
+            this.groupBox2.TabIndex = 6;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "QSO Communications";
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(3, 560);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 19);
+            this.button1.TabIndex = 11;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // Form1
             // 
@@ -184,8 +197,8 @@
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.groupBox1.ResumeLayout(false);
-            this.groupBox2.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
+            this.groupBox2.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -203,6 +216,7 @@
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.Panel mapPanel;
         private System.Windows.Forms.Label toolStripStatusLabel;
+        private System.Windows.Forms.Button button1;
     }
 }
 
