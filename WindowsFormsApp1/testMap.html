@@ -10,6 +10,9 @@
    <script type='text/javascript'>
 
        var map;
+       //The bounding box and url for the image to overlay.
+       var bounds;
+
 
        function GetMap() {
            map = new Microsoft.Maps.Map('#myMap', {
@@ -19,15 +22,12 @@
                disableZooming: true,
                zoom: 1
            });
+           bounds = Microsoft.Maps.LocationRect.fromCorners(new Microsoft.Maps.Location(75, -180), new Microsoft.Maps.Location(-75, 180));
 
            //Define a custom overlay class that inherts from the CustomOverlay class.
            TopographicOverlay.prototype = new Microsoft.Maps.CustomOverlay();
 
-           //Define a constructor for the custom overlay class.
-           function TopographicOverlay(bounds, image) {
-               this.bounds = bounds;
-               this.image = image;
-           }
+  
 
            //Implement the onAdd method to set up DOM elements, and use setHtmlElement to bind it with the overlay.
            TopographicOverlay.prototype.onAdd = function () {
@@ -62,10 +62,18 @@
                img.style.width = (bottomRight.x - topLeft.x) + 'px';
                img.style.height = (bottomRight.y - topLeft.y) + 'px';
            }
+       }
 
-           //The bounding box and url for the image to overlay.
-           var bounds = Microsoft.Maps.LocationRect.fromCorners(new Microsoft.Maps.Location(75, -180), new Microsoft.Maps.Location(-75, 180));
-           var imageSrc = './0096.jpg';
+       //Define a constructor for the custom overlay class.
+       function TopographicOverlay(bounds, image) {
+           this.bounds = bounds;
+           this.image = image;
+       }
+
+       function OverlayIoMap(imageSrc) {
+
+           console.log(map.layers.length);
+           map.layers.removeAt(map.layers.length - 1);
 
            //Implement the new custom overlay class. 
            var overlay = new TopographicOverlay(bounds, imageSrc);
@@ -73,7 +81,6 @@
            //Add the custom overlay to the map.
            map.layers.insert(overlay);
        }
-
 
        function ClearEntities() {
            map.entities.clear();
@@ -158,7 +165,7 @@
         });
        }
 
-    </script>
+   </script>
 </head>
   <body style="margin:0;">
       

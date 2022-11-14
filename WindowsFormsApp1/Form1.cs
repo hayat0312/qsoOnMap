@@ -51,6 +51,8 @@ namespace WindowsFormsApp1
             mapPanel.Width = (int)(mapPanel.Height * 432 / 279);
 
             DlIoMap();
+
+
             //AccesserTest();
         }
 
@@ -1477,12 +1479,61 @@ namespace WindowsFormsApp1
                         cefBrowser.ExecuteScriptAsync("DrawLine(" + toLat + " ," + toLng + ", " + fromLat + " ," + fromLng + ", false);");
                     }
                 }
+
+                if (imageSelecter(com.date))
+                {
+                    cefBrowser.ExecuteScriptAsync("OverlayIoMap('appear.jpg')");
+                }
+                else
+                {
+                    cefBrowser.ExecuteScriptAsync("OverlayIoMap('white.jpg')");
+                }
             }
             catch (Exception ex)
             {
                 cefBrowser.ExecuteScriptAsync("ClearEntities()");
                 //Console.WriteLine("error is" + ex);
             }
+        }
+
+        private void Triming(string imgTitle)
+        {
+            var gifPath = "C:\\Users\\ouchi\\source\\repos\\WindowsFormsApp1\\WindowsFormsApp1";
+
+            // 画像を読み込む
+            Bitmap srcImage = new Bitmap(gifPath + "\\" + imgTitle);
+
+            // 画像を切り抜く範囲を指定
+            Rectangle rect = new Rectangle(8, 56, 432, 279);
+            Bitmap destImage = srcImage.Clone(rect, srcImage.PixelFormat);
+
+            // 画像をJPG形式で保存
+            destImage.Save(gifPath + "\\appear.jpg", ImageFormat.Jpeg);
+
+            // 画像リソースを解放
+            srcImage.Dispose();
+            destImage.Dispose();
+
+
+        }
+
+        private bool imageSelecter(DateTime dt)
+        {
+            DateTime now = DateTime.Now;
+            DateTime yesterday = now.AddDays(-1);
+            if (yesterday > dt)
+            {
+                return false;
+            }
+            else
+            {
+                int imgNum = (int)((dt - yesterday).TotalSeconds * 95 / 86400);
+                string imgTitle = "00" + (imgNum).ToString() + ".jpg";
+                Console.WriteLine(imgTitle);
+                Triming(imgTitle);
+                return true;
+            }
+
         }
 
         private void AccesserTest()
@@ -1593,32 +1644,12 @@ namespace WindowsFormsApp1
                     ImageAnimator.UpdateFrames(img);
                 }
             }
-
-
-            // 画像を読み込む
-            Bitmap srcImage = new Bitmap(gifPath + "\\0095.jpg");
-
-            // 画像を切り抜く範囲を指定
-            Rectangle rect = new Rectangle(8, 56, 432, 279);
-            Bitmap destImage = srcImage.Clone(rect, srcImage.PixelFormat);
-
-            // 画像をPNG形式で保存
-            destImage.Save(gifPath + "\\0096.jpg", System.Drawing.Imaging.ImageFormat.Jpeg);
-
-            // 画像リソースを解放
-            srcImage.Dispose();
-            destImage.Dispose();
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            cefBrowser.ExecuteScriptAsync("DisplayIo()");
         }
 
         private void mapPanel_SizeChanged(object sender, EventArgs e)
         {
             mapPanel.Height = 300;
-            mapPanel.Width = (int)(mapPanel.Height*432/279);
+            mapPanel.Width = (int)(mapPanel.Height * 432 / 279);
         }
     }
 }
