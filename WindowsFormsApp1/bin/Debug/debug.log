@@ -1034,3 +1034,9 @@
 [1114/191056.584:INFO:CONSOLE(75)] "1", source: file:///C:/Users/ouchi/source/repos/WindowsFormsApp1/WindowsFormsApp1/testMap.html (75)
 [1114/191057.868:INFO:CONSOLE(75)] "1", source: file:///C:/Users/ouchi/source/repos/WindowsFormsApp1/WindowsFormsApp1/testMap.html (75)
 [1114/191105.481:INFO:CONSOLE(75)] "1", source: file:///C:/Users/ouchi/source/repos/WindowsFormsApp1/WindowsFormsApp1/testMap.html (75)
+[1115/173438.698:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1115/173511.926:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1115/173517.579:INFO:CONSOLE(75)] "0", source: file:///C:/Users/ouchi/source/repos/WindowsFormsApp1/WindowsFormsApp1/testMap.html (75)
+[1115/173519.118:INFO:CONSOLE(75)] "1", source: file:///C:/Users/ouchi/source/repos/WindowsFormsApp1/WindowsFormsApp1/testMap.html (75)
+[1115/173519.474:INFO:CONSOLE(75)] "1", source: file:///C:/Users/ouchi/source/repos/WindowsFormsApp1/WindowsFormsApp1/testMap.html (75)
+[1115/173521.053:INFO:CONSOLE(75)] "1", source: file:///C:/Users/ouchi/source/repos/WindowsFormsApp1/WindowsFormsApp1/testMap.html (75)

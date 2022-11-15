@@ -19,6 +19,7 @@ namespace WindowsFormsApp1
         Dictionary<string, string> countryCode;
         Dictionary<string, (double?, double?)> countryLatlng;
         Dictionary<string, (double?, double?)> callsignLocation;
+        //Needs to be changed later.
         string mapHtml = @"C:\Users\ouchi\source\repos\WindowsFormsApp1\WindowsFormsApp1\testMap.html";
         ChromiumWebBrowser cefBrowser;
         CefSettings settings;
@@ -28,18 +29,16 @@ namespace WindowsFormsApp1
             //this.WindowState = FormWindowState.Maximized;
 
             InitializeComponent();
-
-            //mapButton.Enabled = false;
             toolStripStatusLabel.Text = "読み込み中...";
 
             settings = new CefSettings();
-            // レンダリングを最適化(これをやらないとバグる)
+            //Optimize rendering.
             settings.SetOffScreenRenderingBestPerformanceArgs();
             Cef.Initialize(settings);
             cefBrowser = new ChromiumWebBrowser(mapHtml);
             cefBrowser.LoadingStateChanged += CefBrowser_LoadingStateChanged;
             cefBrowser.FrameLoadEnd += OnBrowserFrameLoadEnd;
-            // Panelに合わせて表示
+            // Display according to mapPanel.
             mapPanel.Controls.Add(cefBrowser);
             cefBrowser.Dock = DockStyle.Fill;
 
@@ -58,6 +57,7 @@ namespace WindowsFormsApp1
 
         private void OnBrowserFrameLoadEnd(object sender, FrameLoadEndEventArgs args)
         {
+            //hide the scroll bar of Cefbrowser.
             if (args.Frame.IsMain)
             {
                 args
@@ -1519,6 +1519,7 @@ namespace WindowsFormsApp1
 
         private bool imageSelecter(DateTime dt)
         {
+            //if proper ionospheric map found, trim it, save as "appear.jpg" and return true.
             DateTime now = DateTime.Now;
             DateTime yesterday = now.AddDays(-1);
             if (yesterday > dt)
@@ -1543,6 +1544,7 @@ namespace WindowsFormsApp1
 
         public static int CountOf(string target, params string[] strArray)
         {
+            //return numbers of letter in string 
             int count = 0;
 
             foreach (string str in strArray)
@@ -1560,6 +1562,7 @@ namespace WindowsFormsApp1
 
         private static string latestComs(DateTime standard)
         {
+            //return newer lines than the standard.
             var ansStr = new ArrayList();
             string lastRow;
             using (FileStream fs = new FileStream(@"C:\Users\ouchi\Desktop\testForQSO.txt", FileMode.Open, FileAccess.Read))
@@ -1613,6 +1616,7 @@ namespace WindowsFormsApp1
 
         private void DlIoMap()
         {
+            //download gif from website and chop it up to .jpg
             var gifPath = "C:\\Users\\ouchi\\source\\repos\\WindowsFormsApp1\\WindowsFormsApp1";
             WebClient wc = new WebClient();
             wc.DownloadFile("https://giro.uml.edu/IRTAM/IRTAM_foF2.gif", gifPath + "\\IRTAM_foF2.gif");

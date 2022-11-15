@@ -10,7 +10,6 @@
    <script type='text/javascript'>
 
        var map;
-       //The bounding box and url for the image to overlay.
        var bounds;
 
 
@@ -22,6 +21,7 @@
                disableZooming: true,
                zoom: 1
            });
+           //Set corners of ionospheric map.
            bounds = Microsoft.Maps.LocationRect.fromCorners(new Microsoft.Maps.Location(75, -180), new Microsoft.Maps.Location(-75, 180));
 
            //Define a custom overlay class that inherts from the CustomOverlay class.
@@ -72,7 +72,7 @@
 
        function OverlayIoMap(imageSrc) {
 
-           console.log(map.layers.length);
+           //Delete the previous ionospheric map.
            map.layers.removeAt(map.layers.length - 1);
 
            //Implement the new custom overlay class. 
@@ -99,7 +99,6 @@
 
             ClearEntities();
             Microsoft.Maps.loadModule('Microsoft.Maps.SpatialMath', function () {
-            // Create geodesic path locations from Mexico to Tokyo.
 
             var fromLoc = new Microsoft.Maps.Location(fromLat, fromLng);
             var toLoc = new Microsoft.Maps.Location(toLat, toLng);
@@ -131,7 +130,7 @@
                 map.entities.push(pins);
 
 
-
+                //Display pins every 0.5s.
                 var i = 0;
                 setInterval(() => {
                     if (i == pins.length) {
