@@ -1040,3 +1040,32 @@
 [1115/173519.118:INFO:CONSOLE(75)] "1", source: file:///C:/Users/ouchi/source/repos/WindowsFormsApp1/WindowsFormsApp1/testMap.html (75)
 [1115/173519.474:INFO:CONSOLE(75)] "1", source: file:///C:/Users/ouchi/source/repos/WindowsFormsApp1/WindowsFormsApp1/testMap.html (75)
 [1115/173521.053:INFO:CONSOLE(75)] "1", source: file:///C:/Users/ouchi/source/repos/WindowsFormsApp1/WindowsFormsApp1/testMap.html (75)
+[1116/160555.952:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1116/192811.753:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1116/193435.895:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1116/200531.052:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1116/200605.214:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1116/200638.441:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1116/200654.736:INFO:CONSOLE(1)] "Canvas2D: Multiple readback operations using getImageData are faster with the willReadFrequently attribute set to true. See: https://html.spec.whatwg.org/multipage/canvas.html#concept-canvas-will-read-frequently", source: https://r.bing.com/rp/PgZslZuu2vcwiZciV_22IQq3Ajk.br.js (1)
+[1116/201053.384:ERROR:block_files.cc(441)] Failed to open GPUCache\data_1
+[1116/201053.726:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1116/201208.479:INFO:CONSOLE(1)] "Canvas2D: Multiple readback operations using getImageData are faster with the willReadFrequently attribute set to true. See: https://html.spec.whatwg.org/multipage/canvas.html#concept-canvas-will-read-frequently", source: https://r.bing.com/rp/PgZslZuu2vcwiZciV_22IQq3Ajk.br.js (1)
+[1116/231058.728:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1116/231119.335:INFO:CONSOLE(1)] "Canvas2D: Multiple readback operations using getImageData are faster with the willReadFrequently attribute set to true. See: https://html.spec.whatwg.org/multipage/canvas.html#concept-canvas-will-read-frequently", source: https://r.bing.com/rp/PgZslZuu2vcwiZciV_22IQq3Ajk.br.js (1)
+[1116/231301.826:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1116/233222.963:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1116/233412.721:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1116/233514.342:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1116/233615.292:ERROR:block_files.cc(441)] Failed to open DawnCache\data_1
+[1116/233615.661:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1116/233711.702:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1116/233831.538:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1116/233933.446:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1116/234956.031:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1116/235127.732:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1116/235534.881:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1116/235722.182:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1116/235937.560:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1117/000127.901:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1117/000652.483:ERROR:block_files.cc(441)] Failed to open DawnCache\data_1
+[1117/000652.895:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader

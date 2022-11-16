@@ -9,7 +9,9 @@ using System.IO;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Timers;
 using System.Windows.Forms;
+using Timer = System.Timers.Timer;
 
 namespace WindowsFormsApp1
 {
@@ -23,6 +25,10 @@ namespace WindowsFormsApp1
         string mapHtml = @"C:\Users\ouchi\source\repos\WindowsFormsApp1\WindowsFormsApp1\testMap.html";
         ChromiumWebBrowser cefBrowser;
         CefSettings settings;
+        DateTime occarTime;
+        DateTime latestTime = DateTime.Now;
+        //List<string> latestComsList = new List<string>();
+        string[] latestComsList;
 
         public Form1()
         {
@@ -49,8 +55,14 @@ namespace WindowsFormsApp1
             mapPanel.Height = 300;
             mapPanel.Width = (int)(mapPanel.Height * 432 / 279);
 
-            DlIoMap();
+            DlIoMap(null, null);
 
+            Timer dlTimer = new Timer();
+            dlTimer.Elapsed += new ElapsedEventHandler(DlIoMap);
+            dlTimer.Interval = 900000; // コンストラクタでも指定可
+            dlTimer.Start();
+
+            occarTime = DateTime.Now;
 
             //AccesserTest();
         }
@@ -1202,16 +1214,17 @@ namespace WindowsFormsApp1
                         //categorize(property[7], property[8], property[9]);
                         string toCountry = FindCountry(property[7]);
                         string fromCountry = FindCountry(property[8]);
-                        com = new Communication
-                        {
-                            id = clicktimes - 1,
-                            date = new DateTime(
+                        latestTime = new DateTime(
                                 2000 + int.Parse(property[0].Substring(0, 2)),
                                 int.Parse(property[0].Substring(2, 2)),
                                 int.Parse(property[0].Substring(4, 2)),
                                 int.Parse(property[0].Substring(7, 2)),
                                 int.Parse(property[0].Substring(9, 2)),
-                                int.Parse(property[0].Substring(11, 2))),
+                                int.Parse(property[0].Substring(11, 2)));
+                        com = new Communication
+                        {
+                            id = clicktimes - 1,
+                            date = latestTime,
                             frequency = property[1],
                             type = type,
                             message1 = property[7],
@@ -1228,13 +1241,7 @@ namespace WindowsFormsApp1
                         com = new Communication
                         {
                             id = clicktimes - 1,
-                            date = new DateTime(
-                                2000 + int.Parse(property[0].Substring(0, 2)),
-                                int.Parse(property[0].Substring(2, 2)),
-                                int.Parse(property[0].Substring(4, 2)),
-                                int.Parse(property[0].Substring(7, 2)),
-                                int.Parse(property[0].Substring(9, 2)),
-                                int.Parse(property[0].Substring(11, 2))),
+                            date = latestTime,
                             frequency = "",
                             type = type,
                             message1 = "",
@@ -1537,10 +1544,6 @@ namespace WindowsFormsApp1
 
         }
 
-        private void AccesserTest()
-        {
-            Console.WriteLine(latestComs(DateTime.Now));
-        }
 
         public static int CountOf(string target, params string[] strArray)
         {
@@ -1560,11 +1563,10 @@ namespace WindowsFormsApp1
             return count;
         }
 
-        private static string latestComs(DateTime standard)
+        private void latestComs(DateTime standard)
         {
-            //return newer lines than the standard.
+            //register newer lines than the standard to latestComsList.
             var ansStr = new ArrayList();
-            string lastRow;
             using (FileStream fs = new FileStream(@"C:\Users\ouchi\Desktop\testForQSO.txt", FileMode.Open, FileAccess.Read))
             {
                 var str = "";
@@ -1599,22 +1601,24 @@ namespace WindowsFormsApp1
                             {
                                 break;
                             }
+                            string temp = string.Copy(str);
+                            temp = temp.Trim('\r').Trim('\n');
+                            latestComsList = temp.Split('\n');
+
                             param = CountOf(str, "\r\n");
                         }
                     }
                     index++;
                     bytes.Clear();
                 }
-                lastRow = str.Trim('\r').Trim('\n');
-                lastRow = lastRow.Substring(lastRow.IndexOf("\r\n"));
-                lastRow = lastRow.Trim('\r').Trim('\n');
-
-
+                for (int i = 0; i < latestComsList.Length; i++)
+                {
+                    latestComsList[i] = latestComsList[i].Trim('\n').Trim('\r');
+                }
             }
-            return lastRow;
         }
 
-        private void DlIoMap()
+        private void DlIoMap(object sender, ElapsedEventArgs eea)
         {
             //download gif from website and chop it up to .jpg
             var gifPath = "C:\\Users\\ouchi\\source\\repos\\WindowsFormsApp1\\WindowsFormsApp1";
@@ -1655,5 +1659,27 @@ namespace WindowsFormsApp1
             mapPanel.Height = 300;
             mapPanel.Width = (int)(mapPanel.Height * 432 / 279);
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            latestComs(DateTime.Now);
+
+            Timer renewTimer = new Timer();
+            renewTimer.Elapsed += new ElapsedEventHandler(RenewComs);
+            renewTimer.Interval = 1000; // コンストラクタでも指定可
+            renewTimer.Start();
+        }
+
+        private void RenewComs(object sender, ElapsedEventArgs e)
+        {
+            Console.WriteLine("listの中身は");
+
+            foreach (string list in latestComsList)
+            {
+                Console.WriteLine("[" + list + "],");
+            }
+        }
     }
+
+
 }
