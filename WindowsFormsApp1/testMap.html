@@ -1,174 +1,195 @@
 <!DOCTYPE html>
 <html>
-  <head>
+
+<head>
     <title>Bing Maps API</title>
     <meta charset="utf-8" />
     <script type='text/javascript'
-      src='https://www.bing.com/api/maps/mapcontrol?callback=GetMap&key=OUFbr0KCZiL9lfq75yMc~iwtEaOWwpffgUz1pzl7Odw~Ash4QSF2avUPgaRftSA8lfY__SwWO0wA83f8OvKpO4P6vGAcmkCm2lT9VW8i5RzR&setLang=ja' 
-      async defer></script>
+        src='https://www.bing.com/api/maps/mapcontrol?callback=GetMap&key=OUFbr0KCZiL9lfq75yMc~iwtEaOWwpffgUz1pzl7Odw~Ash4QSF2avUPgaRftSA8lfY__SwWO0wA83f8OvKpO4P6vGAcmkCm2lT9VW8i5RzR&setLang=ja'
+        async defer></script>
 
-   <script type='text/javascript'>
+    <script type='text/javascript'>
 
-       var map;
-       var bounds;
+        var map;
+        var bounds;
+        var lineColor;
+        var homeLoc;
 
 
-       function GetMap() {
-           map = new Microsoft.Maps.Map('#myMap', {
-               center: new Microsoft.Maps.Location(0, 0),
-               showDashboard: false,
-               disablePanning: true,
-               disableZooming: true,
-               zoom: 1
-           });
-           //Set corners of ionospheric map.
-           bounds = Microsoft.Maps.LocationRect.fromCorners(new Microsoft.Maps.Location(75, -180), new Microsoft.Maps.Location(-75, 180));
+        function GetMap() {
+            map = new Microsoft.Maps.Map('#myMap', {
+                center: new Microsoft.Maps.Location(0, 0),
+                showDashboard: false,
+                //disablePanning: true,
+                //disableZooming: true,
+                zoom: 1
+            });
+            //Set corners of ionospheric map.
+            bounds = Microsoft.Maps.LocationRect.fromCorners(new Microsoft.Maps.Location(75, -180), new Microsoft.Maps.Location(-75, 180));
+            lineColor = new Microsoft.Maps.Color(0.5, 0, 255, 0);
+            homeLoc = new Microsoft.Maps.Location(35.70728450934643, 139.70821478976535);
 
-           //Define a custom overlay class that inherts from the CustomOverlay class.
-           TopographicOverlay.prototype = new Microsoft.Maps.CustomOverlay();
+            //Define a custom overlay class that inherts from the CustomOverlay class.
+            TopographicOverlay.prototype = new Microsoft.Maps.CustomOverlay();
 
-  
 
-           //Implement the onAdd method to set up DOM elements, and use setHtmlElement to bind it with the overlay.
-           TopographicOverlay.prototype.onAdd = function () {
-               //Create an image element that will be used as the overlay.
-               img = document.createElement('img');
-               img.src = this.image;
-               img.style.width = '100%';
-               img.style.height = '100%';
-               img.style.position = 'absolute';
-               img.style.opacity = "0.5";
-               this.setHtmlElement(img);
-           };
 
-           //Implement the onLoad method to perform custom operations of rendering the DOM element.
-           TopographicOverlay.prototype.onLoad = function () {
-               repositionOverlay();
+            //Implement the onAdd method to set up DOM elements, and use setHtmlElement to bind it with the overlay.
+            TopographicOverlay.prototype.onAdd = function () {
+                //Create an image element that will be used as the overlay.
+                img = document.createElement('img');
+                img.src = this.image;
+                img.style.width = '100%';
+                img.style.height = '100%';
+                img.style.position = 'absolute';
+                img.style.opacity = "0.5";
+                this.setHtmlElement(img);
+            };
 
-               //Update the position of the image when the view changes.
-               Microsoft.Maps.Events.addHandler(map, 'viewchange', function () {
-                   repositionOverlay();
-               });
-           };
+            //Implement the onLoad method to perform custom operations of rendering the DOM element.
+            TopographicOverlay.prototype.onLoad = function () {
+                repositionOverlay();
 
-           function repositionOverlay() {
-               //Streach and position the image based on the bounding box pixel coordinates.
-               var topLeft = map.tryLocationToPixel(bounds.getNorthwest(), Microsoft.Maps.PixelReference.control);
-               var bottomRight = map.tryLocationToPixel(bounds.getSoutheast(), Microsoft.Maps.PixelReference.control);
+                //Update the position of the image when the view changes.
+                Microsoft.Maps.Events.addHandler(map, 'viewchange', function () {
+                    repositionOverlay();
+                });
+            };
 
-               img.style.left = topLeft.x + 'px';
-               img.style.top = topLeft.y + 'px';
-               img.style.width = (bottomRight.x - topLeft.x) + 'px';
-               img.style.width = (bottomRight.x - topLeft.x) + 'px';
-               img.style.height = (bottomRight.y - topLeft.y) + 'px';
-           }
-       }
+            function repositionOverlay() {
+                //Streach and position the image based on the bounding box pixel coordinates.
+                var topLeft = map.tryLocationToPixel(bounds.getNorthwest(), Microsoft.Maps.PixelReference.control);
+                var bottomRight = map.tryLocationToPixel(bounds.getSoutheast(), Microsoft.Maps.PixelReference.control);
 
-       //Define a constructor for the custom overlay class.
-       function TopographicOverlay(bounds, image) {
-           this.bounds = bounds;
-           this.image = image;
-       }
+                img.style.left = topLeft.x + 'px';
+                img.style.top = topLeft.y + 'px';
+                img.style.width = (bottomRight.x - topLeft.x) + 'px';
+                img.style.width = (bottomRight.x - topLeft.x) + 'px';
+                img.style.height = (bottomRight.y - topLeft.y) + 'px';
+            }
+        }
 
-       function OverlayIoMap(imageSrc) {
+        //Define a constructor for the custom overlay class.
+        function TopographicOverlay(bounds, image) {
+            this.bounds = bounds;
+            this.image = image;
+        }
 
-           //Delete the previous ionospheric map.
-           map.layers.removeAt(map.layers.length - 1);
+        function OverlayIoMap(imageSrc) {
 
-           //Implement the new custom overlay class. 
-           var overlay = new TopographicOverlay(bounds, imageSrc);
+            //Delete the previous ionospheric map.
+            map.layers.removeAt(map.layers.length - 1);
 
-           //Add the custom overlay to the map.
-           map.layers.insert(overlay);
-       }
+            //Implement the new custom overlay class. 
+            var overlay = new TopographicOverlay(bounds, imageSrc);
 
-       function ClearEntities() {
-           map.entities.clear();
-       }
+            //Add the custom overlay to the map.
+            map.layers.insert(overlay);
+        }
 
-       function PointCQ(lat, lng) {
-           ClearEntities();
-           var location = new Microsoft.Maps.Location(lat, lng);
-           var pin = new Microsoft.Maps.Pushpin(location, {
-               color: "red",
-           });
-           map.entities.push(pin);
-       }
+        function ClearEntities() {
+            map.entities.clear();
+        }
 
-       function DrawLine(toLat, toLng, fromLat, fromLng, isDynamic) { 
+        function DrawToHome(fromLoc) {
+            const homeLocPath = Microsoft.Maps.SpatialMath.getGeodesicPath([homeLoc, fromLoc]);
+            const homeLine = new Microsoft.Maps.Polyline(homeLocPath, {
+                strokeColor: lineColor,
+                strokeThickness: 10,
+            });
+            map.entities.push(homeLine);
+        }
+
+        function PointCQ(lat, lng) {
+            ClearEntities();
+            var location = new Microsoft.Maps.Location(lat, lng);
+            var pin = new Microsoft.Maps.Pushpin(location, {
+                color: "red",
+            });
+            map.entities.push(pin);
+            DrawToHome(location);
+        }
+
+        function DrawLine(toLat, toLng, fromLat, fromLng, isDynamic) {
+
 
             ClearEntities();
             Microsoft.Maps.loadModule('Microsoft.Maps.SpatialMath', function () {
 
-            var fromLoc = new Microsoft.Maps.Location(fromLat, fromLng);
-            var toLoc = new Microsoft.Maps.Location(toLat, toLng);
-            const locations = Microsoft.Maps.SpatialMath.getGeodesicPath([toLoc, fromLoc]);
-            const polyline = new Microsoft.Maps.Polyline(locations, {
-                strokeColor: 'red',
-                strokeTickness: 3
-            });
-
-            var distance = Microsoft.Maps.SpatialMath.getDistanceTo(toLoc, fromLoc, Microsoft.Maps.SpatialMath.DistanceUnits.Kilometers);
-
-            var leftDistance = distance;
-
-            var pins = [];
-
-            if (isDynamic) {
-                //execute when allList or detailList clicked.
-                while (leftDistance > 0) {
-                    leftDistance -= distance / 10;
-
-                    var pointLoc = Microsoft.Maps.SpatialMath.getLocationAlongPath(polyline, leftDistance, Microsoft.Maps.SpatialMath.DistanceUnits.Kilometers);
-                    var pin = new Microsoft.Maps.Pushpin(pointLoc, {
-                        color: "red",
-                        visible: false
-                    });
-                    pins.push(pin);
-                }
-                map.entities.push(polyline);
-                map.entities.push(pins);
+                var fromLoc = new Microsoft.Maps.Location(fromLat, fromLng);
+                var toLoc = new Microsoft.Maps.Location(toLat, toLng);
+                const actualLocPath = Microsoft.Maps.SpatialMath.getGeodesicPath([toLoc, fromLoc]);
+                const actualLine = new Microsoft.Maps.Polyline(actualLocPath, {
+                    strokeColor: lineColor,
+                    strokeThickness: 10,
+                });
 
 
-                //Display pins every 0.5s.
-                var i = 0;
-                setInterval(() => {
-                    if (i == pins.length) {
-                        pins.map(function (value) {
-                            value.setOptions({ visible: false })
+                var distance = Microsoft.Maps.SpatialMath.getDistanceTo(toLoc, fromLoc, Microsoft.Maps.SpatialMath.DistanceUnits.Kilometers);
+
+                var leftDistance = distance;
+
+                var pins = [];
+
+                if (isDynamic) {
+                    //execute when allList or detailList clicked.
+                    while (leftDistance > 0) {
+                        leftDistance -= distance / 10;
+
+                        var pointLoc = Microsoft.Maps.SpatialMath.getLocationAlongPath(actualLine, leftDistance, Microsoft.Maps.SpatialMath.DistanceUnits.Kilometers);
+                        var pin = new Microsoft.Maps.Pushpin(pointLoc, {
+                            color: "red",
+                            visible: false
                         });
-                        i = 0;
+                        pins.push(pin);
                     }
-                    pins[i].setOptions({ visible: true });
-                    i++;
-                }, 500);
-            }
-            else {
-                //execute when cqList clicked
+                    map.entities.push(actualLine);
+                    DrawToHome(fromLoc);
+                    map.entities.push(pins);
 
-                while (leftDistance > 0) {
-                    leftDistance -= distance / 10;
 
-                    var pointLoc = Microsoft.Maps.SpatialMath.getLocationAlongPath(polyline, leftDistance, Microsoft.Maps.SpatialMath.DistanceUnits.Kilometers);
-                    var pin = new Microsoft.Maps.Pushpin(pointLoc, {
-                        color: "red",
-                        visible: true
-                    });
-                    pins.push(pin);
+                    //Display pins every 0.5s.
+                    var i = 0;
+                    setInterval(() => {
+                        if (i == pins.length) {
+                            pins.map(function (value) {
+                                value.setOptions({ visible: false })
+                            });
+                            i = 0;
+                        }
+                        pins[i].setOptions({ visible: true });
+                        i++;
+                    }, 500);
                 }
+                else {
+                    //execute when cqList clicked
+
+                    while (leftDistance > 0) {
+                        leftDistance -= distance / 10;
+
+                        var pointLoc = Microsoft.Maps.SpatialMath.getLocationAlongPath(polyline, leftDistance, Microsoft.Maps.SpatialMath.DistanceUnits.Kilometers);
+                        var pin = new Microsoft.Maps.Pushpin(pointLoc, {
+                            color: "red",
+                            visible: true
+                        });
+                        pins.push(pin);
+                    }
 
 
-                map.entities.push(polyline);
-                map.entities.push(pins);
-            }
-        });
-       }
+                    map.entities.push(actualLine);
+                    DrawToHome(fromLoc);
+                    map.entities.push(pins);
+                }
+            });
+        }
 
-   </script>
+    </script>
 </head>
-  <body style="margin:0;">
-      
-      <div id="myMap" style="width:100%;height:100%;"></div>
 
-  </body>
+<body style="margin:0;">
+
+    <div id="myMap" style="width:100%;height:100%;"></div>
+
+</body>
+
 </html>

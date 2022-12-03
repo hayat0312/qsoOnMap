@@ -3,10 +3,7 @@ using CefSharp.WinForms;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
-using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Timers;
@@ -54,13 +51,6 @@ namespace WindowsFormsApp1
             InitializeDetailList();
             mapPanel.Height = 300;
             mapPanel.Width = (int)(mapPanel.Height * 432 / 279);
-
-            DlIoMap(null, null);
-
-            Timer dlTimer = new Timer();
-            dlTimer.Elapsed += new ElapsedEventHandler(DlIoMap);
-            dlTimer.Interval = 900000; // コンストラクタでも指定可
-            dlTimer.Start();
 
             occarTime = DateTime.Now;
 
@@ -1193,7 +1183,7 @@ namespace WindowsFormsApp1
         {
 
             using (StreamReader sr = new StreamReader(
-                "C:\\Users\\ouchi\\Desktop\\CopyOfAll.txt", Encoding.GetEncoding("Shift_JIS")))
+                "C:\\Users\\ouchi\\Desktop\\testForQSO.txt", Encoding.GetEncoding("Shift_JIS")))
             {
                 //for (int i = 0; i < 10000; i++) sr.ReadLine();
                 for (int all = 1; all < 100; all++)
@@ -1486,62 +1476,12 @@ namespace WindowsFormsApp1
                         cefBrowser.ExecuteScriptAsync("DrawLine(" + toLat + " ," + toLng + ", " + fromLat + " ," + fromLng + ", false);");
                     }
                 }
-
-                if (imageSelecter(com.date))
-                {
-                    cefBrowser.ExecuteScriptAsync("OverlayIoMap('appear.jpg')");
-                }
-                else
-                {
-                    cefBrowser.ExecuteScriptAsync("OverlayIoMap('white.jpg')");
-                }
             }
             catch (Exception ex)
             {
                 cefBrowser.ExecuteScriptAsync("ClearEntities()");
                 //Console.WriteLine("error is" + ex);
             }
-        }
-
-        private void Triming(string imgTitle)
-        {
-            var gifPath = "C:\\Users\\ouchi\\source\\repos\\WindowsFormsApp1\\WindowsFormsApp1";
-
-            // 画像を読み込む
-            Bitmap srcImage = new Bitmap(gifPath + "\\" + imgTitle);
-
-            // 画像を切り抜く範囲を指定
-            Rectangle rect = new Rectangle(8, 56, 432, 279);
-            Bitmap destImage = srcImage.Clone(rect, srcImage.PixelFormat);
-
-            // 画像をJPG形式で保存
-            destImage.Save(gifPath + "\\appear.jpg", ImageFormat.Jpeg);
-
-            // 画像リソースを解放
-            srcImage.Dispose();
-            destImage.Dispose();
-
-
-        }
-
-        private bool imageSelecter(DateTime dt)
-        {
-            //if proper ionospheric map found, trim it, save as "appear.jpg" and return true.
-            DateTime now = DateTime.Now;
-            DateTime yesterday = now.AddDays(-1);
-            if (yesterday > dt)
-            {
-                return false;
-            }
-            else
-            {
-                int imgNum = (int)((dt - yesterday).TotalSeconds * 95 / 86400);
-                string imgTitle = "00" + (imgNum).ToString() + ".jpg";
-                Console.WriteLine(imgTitle);
-                Triming(imgTitle);
-                return true;
-            }
-
         }
 
 
@@ -1618,41 +1558,6 @@ namespace WindowsFormsApp1
             }
         }
 
-        private void DlIoMap(object sender, ElapsedEventArgs eea)
-        {
-            //download gif from website and chop it up to .jpg
-            var gifPath = "C:\\Users\\ouchi\\source\\repos\\WindowsFormsApp1\\WindowsFormsApp1";
-            WebClient wc = new WebClient();
-            wc.DownloadFile("https://giro.uml.edu/IRTAM/IRTAM_foF2.gif", gifPath + "\\IRTAM_foF2.gif");
-            var format = ImageFormat.Jpeg;
-            var extension = "jpg";
-            Image img = Image.FromFile(gifPath + "\\IRTAM_foF2.gif");
-
-            // 等倍で再生する
-            bool isReady = false;
-            ImageAnimator.Animate(img, (Object o, EventArgs e) => isReady = true);
-
-            var renderTarget = new Bitmap(img.Width, img.Height);
-            using (var g = Graphics.FromImage(renderTarget))
-            {
-
-                var guid = img.FrameDimensionsList[0];
-                var dimension = new System.Drawing.Imaging.FrameDimension(guid);
-                var end = img.GetFrameCount(dimension);
-                for (int i = 0; i < end; ++i)
-                {
-
-                    // Animator が次のフレームを準備できるまで待つ
-                    while (!isReady) { System.Threading.Thread.Sleep(10); }
-                    isReady = false;
-
-                    g.DrawImage(img, 0, 0);
-                    renderTarget.Save(gifPath + string.Format("/{0:0000}.{1}", i, extension), format);
-
-                    ImageAnimator.UpdateFrames(img);
-                }
-            }
-        }
 
         private void mapPanel_SizeChanged(object sender, EventArgs e)
         {

@@ -1069,3 +1069,57 @@
 [1117/000127.901:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
 [1117/000652.483:ERROR:block_files.cc(441)] Failed to open DawnCache\data_1
 [1117/000652.895:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1118/130817.932:ERROR:component_installer.cc(356)] Failed to read manifest or verify installation for Widevine Content Decryption Module (C:\Users\ouchi\AppData\Local\CEF\User Data\WidevineCdm\4.10.2391.0).: 指定されたパスが見つかりません。 (0x3)
+[1118/130838.957:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1118/133751.902:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1118/133852.323:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1118/133935.268:INFO:CONSOLE(1)] "Canvas2D: Multiple readback operations using getImageData are faster with the willReadFrequently attribute set to true. See: https://html.spec.whatwg.org/multipage/canvas.html#concept-canvas-will-read-frequently", source: https://r.bing.com/rp/PgZslZuu2vcwiZciV_22IQq3Ajk.br.js (1)
+[1118/135248.997:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1118/135535.337:INFO:CONSOLE(1)] "Canvas2D: Multiple readback operations using getImageData are faster with the willReadFrequently attribute set to true. See: https://html.spec.whatwg.org/multipage/canvas.html#concept-canvas-will-read-frequently", source: https://r.bing.com/rp/PgZslZuu2vcwiZciV_22IQq3Ajk.br.js (1)
+[1118/135630.234:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1118/135718.916:INFO:CONSOLE(1)] "Canvas2D: Multiple readback operations using getImageData are faster with the willReadFrequently attribute set to true. See: https://html.spec.whatwg.org/multipage/canvas.html#concept-canvas-will-read-frequently", source: https://r.bing.com/rp/PgZslZuu2vcwiZciV_22IQq3Ajk.br.js (1)
+[1118/140741.062:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1118/140813.002:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1118/142424.159:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1118/142436.629:INFO:CONSOLE(1)] "Canvas2D: Multiple readback operations using getImageData are faster with the willReadFrequently attribute set to true. See: https://html.spec.whatwg.org/multipage/canvas.html#concept-canvas-will-read-frequently", source: https://r.bing.com/rp/PgZslZuu2vcwiZciV_22IQq3Ajk.br.js (1)
+[1118/142526.953:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1130/154735.802:ERROR:component_installer.cc(356)] Failed to read manifest or verify installation for Widevine Content Decryption Module (C:\Users\ouchi\AppData\Local\CEF\User Data\WidevineCdm\4.10.2557.0).: 指定されたパスが見つかりません。 (0x3)
+[1130/154803.344:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1202/152608.178:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1202/152618.146:INFO:CONSOLE(1)] "Canvas2D: Multiple readback operations using getImageData are faster with the willReadFrequently attribute set to true. See: https://html.spec.whatwg.org/multipage/canvas.html#concept-canvas-will-read-frequently", source: https://r.bing.com/rp/PgZslZuu2vcwiZciV_22IQq3Ajk.br.js (1)
+[1202/152801.139:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1202/152852.132:INFO:CONSOLE(1)] "Canvas2D: Multiple readback operations using getImageData are faster with the willReadFrequently attribute set to true. See: https://html.spec.whatwg.org/multipage/canvas.html#concept-canvas-will-read-frequently", source: https://r.bing.com/rp/PgZslZuu2vcwiZciV_22IQq3Ajk.br.js (1)
+[1202/153124.617:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1202/153130.692:INFO:CONSOLE(1)] "Canvas2D: Multiple readback operations using getImageData are faster with the willReadFrequently attribute set to true. See: https://html.spec.whatwg.org/multipage/canvas.html#concept-canvas-will-read-frequently", source: https://r.bing.com/rp/PgZslZuu2vcwiZciV_22IQq3Ajk.br.js (1)
+[1202/153922.947:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1202/153929.467:INFO:CONSOLE(1)] "Canvas2D: Multiple readback operations using getImageData are faster with the willReadFrequently attribute set to true. See: https://html.spec.whatwg.org/multipage/canvas.html#concept-canvas-will-read-frequently", source: https://r.bing.com/rp/PgZslZuu2vcwiZciV_22IQq3Ajk.br.js (1)
+[1202/154049.247:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1202/154055.805:INFO:CONSOLE(1)] "Canvas2D: Multiple readback operations using getImageData are faster with the willReadFrequently attribute set to true. See: https://html.spec.whatwg.org/multipage/canvas.html#concept-canvas-will-read-frequently", source: https://r.bing.com/rp/PgZslZuu2vcwiZciV_22IQq3Ajk.br.js (1)
+[1202/154230.475:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1202/154404.004:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1202/154411.916:INFO:CONSOLE(1)] "Canvas2D: Multiple readback operations using getImageData are faster with the willReadFrequently attribute set to true. See: https://html.spec.whatwg.org/multipage/canvas.html#concept-canvas-will-read-frequently", source: https://r.bing.com/rp/PgZslZuu2vcwiZciV_22IQq3Ajk.br.js (1)
+[1202/154812.370:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1202/154851.792:ERROR:block_files.cc(441)] Failed to open DawnCache\data_1
+[1202/154852.274:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1202/155100.699:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1202/155105.627:INFO:CONSOLE(1)] "Canvas2D: Multiple readback operations using getImageData are faster with the willReadFrequently attribute set to true. See: https://html.spec.whatwg.org/multipage/canvas.html#concept-canvas-will-read-frequently", source: https://r.bing.com/rp/PgZslZuu2vcwiZciV_22IQq3Ajk.br.js (1)
+[1203/160356.681:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1203/160444.197:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1203/160521.911:INFO:CONSOLE(1)] "Canvas2D: Multiple readback operations using getImageData are faster with the willReadFrequently attribute set to true. See: https://html.spec.whatwg.org/multipage/canvas.html#concept-canvas-will-read-frequently", source: https://r.bing.com/rp/PgZslZuu2vcwiZciV_22IQq3Ajk.br.js (1)
+[1203/160614.146:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1203/161501.045:INFO:CONSOLE(114)] "Uncaught SyntaxError: Identifier 'actualLine' has already been declared", source: file:///C:/Users/ouchi/source/repos/WindowsFormsApp1/WindowsFormsApp1/testMap.html (114)
+[1203/161501.408:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1203/161503.686:INFO:CONSOLE(1)] "Uncaught ReferenceError: DrawLine is not defined", source: about:blank (1)
+[1203/161556.800:INFO:CONSOLE(114)] "Uncaught SyntaxError: Identifier 'actualLine' has already been declared", source: file:///C:/Users/ouchi/source/repos/WindowsFormsApp1/WindowsFormsApp1/testMap.html (114)
+[1203/161557.022:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1203/161618.257:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1203/161623.056:INFO:CONSOLE(130)] "Uncaught ReferenceError: polyline is not defined", source: file:///C:/Users/ouchi/source/repos/WindowsFormsApp1/WindowsFormsApp1/testMap.html (130)
+[1203/161623.592:INFO:CONSOLE(130)] "Uncaught ReferenceError: polyline is not defined", source: file:///C:/Users/ouchi/source/repos/WindowsFormsApp1/WindowsFormsApp1/testMap.html (130)
+[1203/161624.072:INFO:CONSOLE(130)] "Uncaught ReferenceError: polyline is not defined", source: file:///C:/Users/ouchi/source/repos/WindowsFormsApp1/WindowsFormsApp1/testMap.html (130)
+[1203/161652.740:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1203/163253.750:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1203/163644.517:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1203/163649.276:INFO:CONSOLE(1)] "Canvas2D: Multiple readback operations using getImageData are faster with the willReadFrequently attribute set to true. See: https://html.spec.whatwg.org/multipage/canvas.html#concept-canvas-will-read-frequently", source: https://r.bing.com/rp/PgZslZuu2vcwiZciV_22IQq3Ajk.br.js (1)
+[1203/163850.809:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1203/164004.136:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1203/164012.704:INFO:CONSOLE(95)] "Uncaught TypeError: Cannot read properties of undefined (reading 'getGeodesicPath')", source: file:///C:/Users/ouchi/source/repos/WindowsFormsApp1/WindowsFormsApp1/testMap.html (95)
