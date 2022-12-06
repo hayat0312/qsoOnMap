@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.label1 = new System.Windows.Forms.Label();
             this.showAllButton = new System.Windows.Forms.Button();
             this.cqList = new System.Windows.Forms.ListView();
@@ -35,11 +36,12 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.allList = new System.Windows.Forms.ListView();
             this.mapPanel = new System.Windows.Forms.Panel();
-            this.toolStripStatusLabel = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.detailList = new System.Windows.Forms.ListView();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.button1 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.tableLayoutPanel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -86,12 +88,12 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33334F));
             this.tableLayoutPanel1.Controls.Add(this.groupBox1, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.mapPanel, 1, 1);
-            this.tableLayoutPanel1.Controls.Add(this.toolStripStatusLabel, 1, 2);
             this.tableLayoutPanel1.Controls.Add(this.groupBox3, 2, 0);
             this.tableLayoutPanel1.Controls.Add(this.groupBox2, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.showAllButton, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.label1, 2, 2);
             this.tableLayoutPanel1.Controls.Add(this.button1, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.button2, 2, 1);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -133,15 +135,6 @@
             this.mapPanel.Size = new System.Drawing.Size(328, 283);
             this.mapPanel.TabIndex = 8;
             this.mapPanel.SizeChanged += new System.EventHandler(this.mapPanel_SizeChanged);
-            // 
-            // toolStripStatusLabel
-            // 
-            this.toolStripStatusLabel.AutoSize = true;
-            this.toolStripStatusLabel.Location = new System.Drawing.Point(336, 557);
-            this.toolStripStatusLabel.Name = "toolStripStatusLabel";
-            this.toolStripStatusLabel.Size = new System.Drawing.Size(35, 12);
-            this.toolStripStatusLabel.TabIndex = 10;
-            this.toolStripStatusLabel.Text = "label2";
             // 
             // groupBox3
             // 
@@ -186,6 +179,17 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // button2
+            // 
+            this.button2.Dock = System.Windows.Forms.DockStyle.Right;
+            this.button2.Location = new System.Drawing.Point(924, 271);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 283);
+            this.button2.TabIndex = 12;
+            this.button2.Text = "button2";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -215,8 +219,9 @@
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.Panel mapPanel;
-        private System.Windows.Forms.Label toolStripStatusLabel;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Timer timer1;
     }
 }
 

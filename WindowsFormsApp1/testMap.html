@@ -92,12 +92,15 @@
         }
 
         function DrawToHome(fromLoc) {
-            const homeLocPath = Microsoft.Maps.SpatialMath.getGeodesicPath([homeLoc, fromLoc]);
-            const homeLine = new Microsoft.Maps.Polyline(homeLocPath, {
-                strokeColor: lineColor,
-                strokeThickness: 10,
+            Microsoft.Maps.loadModule('Microsoft.Maps.SpatialMath', function () {
+
+                const homeLocPath = Microsoft.Maps.SpatialMath.getGeodesicPath([homeLoc, fromLoc]);
+                const homeLine = new Microsoft.Maps.Polyline(homeLocPath, {
+                    strokeColor: lineColor,
+                    strokeThickness: 10,
+                });
+                map.entities.push(homeLine);
             });
-            map.entities.push(homeLine);
         }
 
         function PointCQ(lat, lng) {
@@ -111,8 +114,6 @@
         }
 
         function DrawLine(toLat, toLng, fromLat, fromLng, isDynamic) {
-
-
             ClearEntities();
             Microsoft.Maps.loadModule('Microsoft.Maps.SpatialMath', function () {
 

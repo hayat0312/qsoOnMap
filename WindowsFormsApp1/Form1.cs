@@ -1,14 +1,13 @@
 ﻿using CefSharp;
 using CefSharp.WinForms;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Timers;
+using System.Threading.Tasks;
 using System.Windows.Forms;
-using Timer = System.Timers.Timer;
 
 namespace WindowsFormsApp1
 {
@@ -24,22 +23,21 @@ namespace WindowsFormsApp1
         CefSettings settings;
         DateTime occarTime;
         DateTime latestTime = DateTime.Now;
-        //List<string> latestComsList = new List<string>();
-        string[] latestComsList;
+        string[] latestComsArray;
+        List<string> latestComsList = new List<string>();
+
 
         public Form1()
         {
             //this.WindowState = FormWindowState.Maximized;
 
             InitializeComponent();
-            toolStripStatusLabel.Text = "読み込み中...";
 
             settings = new CefSettings();
             //Optimize rendering.
             settings.SetOffScreenRenderingBestPerformanceArgs();
             Cef.Initialize(settings);
             cefBrowser = new ChromiumWebBrowser(mapHtml);
-            cefBrowser.LoadingStateChanged += CefBrowser_LoadingStateChanged;
             cefBrowser.FrameLoadEnd += OnBrowserFrameLoadEnd;
             // Display according to mapPanel.
             mapPanel.Controls.Add(cefBrowser);
@@ -67,19 +65,6 @@ namespace WindowsFormsApp1
                     .MainFrame
                     .ExecuteJavaScriptAsync(
                     "document.body.style.overflow = 'hidden'");
-            }
-        }
-
-        private void CefBrowser_LoadingStateChanged(object sender, LoadingStateChangedEventArgs e)
-        {
-            if (!e.IsLoading)
-            {
-                // 読み込み完了時
-                Invoke((MethodInvoker)delegate
-                {
-                    toolStripStatusLabel.Text = "読み込み完了";
-                    //mapButton.Enabled = true;
-                });
             }
         }
 
@@ -1397,7 +1382,6 @@ namespace WindowsFormsApp1
             else return -1;
         }
 
-
         private void CqList_Click(object sender, EventArgs e)
         {
             detailList.Items.Clear();
@@ -1456,17 +1440,18 @@ namespace WindowsFormsApp1
                 //Console.WriteLine("com.fromC:" + com.fromCountry + ", com.toC:" + com.toCountry);
 
                 (double? fromLat, double? fromLng) = ConvertLatLng(com, true);
+                (double? toLat, double? toLng) = ConvertLatLng(com, false);
+
                 //Console.WriteLine("fromLat:" + fromLat.ToString() + ", fromLng:" + fromLng.ToString());
 
-                if (com.type == 0)
+                if (com.type == 0 || fromLat == toLat)
                 {
                     cefBrowser.ExecuteScriptAsync("PointCQ(" + fromLat + ", " + fromLng + ")");
                 }
                 else
                 {
-                    (double? toLat, double? toLng) = ConvertLatLng(com, false);
-                    //Console.WriteLine("toLat:" + toLat.ToString() + ", toLng:" + toLng.ToString());
-
+                    Console.WriteLine("toLat:" + toLat.ToString() + ", toLng:" + toLng.ToString());
+                    Console.WriteLine("fromLat:" + fromLat.ToString() + ", fromLng:" + fromLng.ToString());
                     if (caller == allList || caller == detailList)
                     {
                         cefBrowser.ExecuteScriptAsync("DrawLine(" + toLat + " ," + toLng + ", " + fromLat + " ," + fromLng + " , true);");
@@ -1480,10 +1465,9 @@ namespace WindowsFormsApp1
             catch (Exception ex)
             {
                 cefBrowser.ExecuteScriptAsync("ClearEntities()");
-                //Console.WriteLine("error is" + ex);
+                Console.WriteLine("error is" + ex);
             }
         }
-
 
         public static int CountOf(string target, params string[] strArray)
         {
@@ -1503,88 +1487,210 @@ namespace WindowsFormsApp1
             return count;
         }
 
-        private void latestComs(DateTime standard)
+        private async void GetLatestComs(DateTime now)
         {
             //register newer lines than the standard to latestComsList.
-            var ansStr = new ArrayList();
-            using (FileStream fs = new FileStream(@"C:\Users\ouchi\Desktop\testForQSO.txt", FileMode.Open, FileAccess.Read))
+            int isOpenable = 0;
+            do
             {
-                var str = "";
-                var index = 0;
-                var bytes = new List<byte>();
-                int param = 0;
-                while (fs.Position >= 0)
+                //ALL.TXTの読み取りを5回試行する
+                try
                 {
-                    fs.Position = fs.Seek(0, SeekOrigin.End) - index;
-
-                    if (fs.CanSeek)
+                    using (FileStream fs = new FileStream(@"C:\Users\ouchi\Desktop\testForQSO.txt", FileMode.Open, FileAccess.Read))
                     {
-                        int read;
-                        while ((read = fs.ReadByte()) >= 0)
+                        latestComsArray = new string[0];
+                        var str = "";
+                        var index = 0;
+                        var bytes = new List<byte>();
+                        int param = 0;
+                        while (fs.Position >= 0)
                         {
-                            bytes.Add((byte)read);
-                        }
+                            fs.Position = fs.Seek(0, SeekOrigin.End) - index;
 
-                        str = Encoding.GetEncoding("Shift_JIS").GetString(bytes.ToArray());
-                        if (CountOf(str, "\r\n") != param)
-                        {
-                            string strTime = str.Trim('\r').Trim('\n').Substring(0, 15);
-                            DateTime time = new DateTime(
-                               2000 + int.Parse(strTime.Substring(0, 2)),
-                               int.Parse(strTime.Substring(2, 2)),
-                               int.Parse(strTime.Substring(4, 2)),
-                               int.Parse(strTime.Substring(7, 2)),
-                               int.Parse(strTime.Substring(9, 2)),
-                               int.Parse(strTime.Substring(11, 2)));
-
-                            if (time < standard)
+                            if (fs.CanSeek)
                             {
-                                break;
-                            }
-                            string temp = string.Copy(str);
-                            temp = temp.Trim('\r').Trim('\n');
-                            latestComsList = temp.Split('\n');
+                                int read;
+                                while ((read = fs.ReadByte()) >= 0)
+                                {
+                                    bytes.Add((byte)read);
+                                }
 
-                            param = CountOf(str, "\r\n");
+                                str = Encoding.GetEncoding("Shift_JIS").GetString(bytes.ToArray());
+                                if (CountOf(str, "\r\n") != param)
+                                {
+                                    string strTime = str.Trim('\r').Trim('\n').Substring(0, 15);
+                                    DateTime candidateTime = new DateTime(
+                                       2000 + int.Parse(strTime.Substring(0, 2)),
+                                       int.Parse(strTime.Substring(2, 2)),
+                                       int.Parse(strTime.Substring(4, 2)),
+                                       int.Parse(strTime.Substring(7, 2)),
+                                       int.Parse(strTime.Substring(9, 2)),
+                                       int.Parse(strTime.Substring(11, 2)));
+
+                                    if (candidateTime < now.AddSeconds(-15) || candidateTime > now)
+                                    {
+                                        Console.WriteLine("broken because " + candidateTime.ToString() + " is not appropriate.\n");
+                                        break;
+                                    }
+                                    string temp = string.Copy(str);
+                                    temp = temp.Trim('\r').Trim('\n');
+                                    latestComsArray = temp.Split('\n');
+
+                                    param = CountOf(str, "\r\n");
+                                }
+                            }
+                            index++;
+                            bytes.Clear();
                         }
+                        for (int i = 0; i < latestComsArray.Length; i++)
+                        {
+                            latestComsArray[i] = latestComsArray[i].Trim('\n').Trim('\r');
+                        }
+                        latestComsList = latestComsArray.ToList();
                     }
-                    index++;
-                    bytes.Clear();
+                    isOpenable = 5;
                 }
-                for (int i = 0; i < latestComsList.Length; i++)
+                catch (Exception e)
                 {
-                    latestComsList[i] = latestComsList[i].Trim('\n').Trim('\r');
+                    Console.WriteLine("例外処理いいいいい：　" + e.StackTrace);
+                    isOpenable++;
+                    await Task.Delay(200);
                 }
+            }
+            while (isOpenable < 5);
+
+            //新規に受信した交信があった場合
+            while (latestComsList.Count > 0)
+            {
+                Console.WriteLine(latestComsList[0]);
+
+                AddComList(latestComsList[0]);
+                clicktimes++;
+                latestComsList.RemoveAt(0);
             }
         }
 
+        private void AddComList(string line)
+        {
+            property = line.Split(new string[] { " ", "　" }, StringSplitOptions.RemoveEmptyEntries);
+            int type = -1;
+            Communication com = null;
+
+            if (property.Length == 10)
+            {
+                type = AnalyzeType(property[7], property[8], property[9]);
+                //Console.Write(type.ToString());
+                //categorize(property[7], property[8], property[9]);
+                string toCountry = FindCountry(property[7]);
+                string fromCountry = FindCountry(property[8]);
+                latestTime = new DateTime(
+                        2000 + int.Parse(property[0].Substring(0, 2)),
+                        int.Parse(property[0].Substring(2, 2)),
+                        int.Parse(property[0].Substring(4, 2)),
+                        int.Parse(property[0].Substring(7, 2)),
+                        int.Parse(property[0].Substring(9, 2)),
+                        int.Parse(property[0].Substring(11, 2)));
+                com = new Communication
+                {
+                    id = clicktimes,
+                    date = latestTime,
+                    frequency = property[1],
+                    type = type,
+                    message1 = property[7],
+                    message2 = property[8],
+                    message3 = property[9],
+                    toCountry = toCountry,
+                    fromCountry = fromCountry,
+                    childId = 0,
+                    isFormat = true
+                };
+            }
+            else
+            {
+                com = new Communication
+                {
+                    id = clicktimes,
+                    date = latestTime,
+                    frequency = "",
+                    type = type,
+                    message1 = "",
+                    message2 = "",
+                    message3 = "",
+                    toCountry = "",
+                    fromCountry = "",
+                    childId = 0,
+                    isFormat = false
+                };
+            }
+            comList.Add(com);
+
+            bool isChild;
+            if (type == 0 || type == -1)
+            {
+                isChild = false;
+            }
+            else
+            {
+                isChild = ChildApply(com.id, com.message1, com.message2);
+            }
+            if (this.InvokeRequired) this.Invoke(new Action<Communication>(this.Addition), com);
+            else Addition(com);
+        }
+
+        private void Addition(Communication com)
+        {
+            string[] appear = { com.id.ToString(), com.date.ToString(), com.frequency, com.message1 + " " + com.message2 + " " + com.message3, com.toCountry + " <- " + com.fromCountry };
+            allList.Items.Add(new ListViewItem(appear));
+        }
+
+        private void RenewList(object sender, EventArgs e)
+        {
+            //QSOListを一度すべて削除
+            Console.WriteLine("renewal");
+            DateTime nowTime = DateTime.Now;
+            if (InvokeRequired) Invoke(new Action(cqList.Items.Clear));
+            else cqList.Items.Clear();
+            clicktimes = 0;
+
+            //allListにいくつか存在していて、且つ最上位の交信が一時間以上前に受信したものだった場合
+            while (allList.Items.Count > 0 && nowTime.AddHours(-1) > comList[0].date)
+            {
+                //最上位の交信を削除
+                comList.RemoveAt(0);
+                if (InvokeRequired) Invoke(new Action(Removal));
+                else allList.Items.RemoveAt(0);
+            }
+            GetLatestComs(DateTime.Now);
+        }
+
+        private void Removal()
+        {
+            allList.Items.RemoveAt(0);
+        }
 
         private void mapPanel_SizeChanged(object sender, EventArgs e)
         {
             mapPanel.Height = 300;
-            mapPanel.Width = (int)(mapPanel.Height * 432 / 279);
+            mapPanel.Width = mapPanel.Height * 432 / 279;
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            latestComs(DateTime.Now);
-
+            RenewList(null, null);
             Timer renewTimer = new Timer();
-            renewTimer.Elapsed += new ElapsedEventHandler(RenewComs);
-            renewTimer.Interval = 1000; // コンストラクタでも指定可
+            renewTimer.Tick += new EventHandler(RenewList);
+            renewTimer.Interval = 5000;
             renewTimer.Start();
         }
 
-        private void RenewComs(object sender, ElapsedEventArgs e)
+        private void button2_Click(object sender, EventArgs e)
         {
-            Console.WriteLine("listの中身は");
+            Console.WriteLine("comの中身は");
 
-            foreach (string list in latestComsList)
+            foreach (Communication list in comList)
             {
-                Console.WriteLine("[" + list + "],");
+                Console.WriteLine(list.id);
             }
         }
     }
-
-
 }
