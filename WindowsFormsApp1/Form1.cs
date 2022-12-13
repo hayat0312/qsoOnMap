@@ -13,6 +13,9 @@ namespace WindowsFormsApp1
 {
     public partial class Form1 : Form
     {
+        LinkedList<string> test = new LinkedList<string>();
+
+
         int clicktimes = 0;
         Dictionary<string, string> countryCode;
         Dictionary<string, (double?, double?)> countryLatlng;
@@ -23,12 +26,26 @@ namespace WindowsFormsApp1
         CefSettings settings;
         DateTime occarTime;
         DateTime latestTime = DateTime.Now;
+        bool isFirst = true;
+        int delay = 0;
         string[] latestComsArray;
         List<string> latestComsList = new List<string>();
+
+        string[] property = { };
+        //List<Communication> comList = new List<Communication>();
+        LinkedList<Communication> comList = new LinkedList<Communication>();
 
 
         public Form1()
         {
+            test.Add("hello");
+            test.Add("good evening");
+            test.Add("good night");
+            test.Remove(test.First);
+
+            Console.WriteLine(test.First.Index);
+            Console.WriteLine(test.Length);
+
             //this.WindowState = FormWindowState.Maximized;
 
             InitializeComponent();
@@ -1161,9 +1178,6 @@ namespace WindowsFormsApp1
             detailList.Columns.AddRange(colHeaderRegValue);
         }
 
-        string[] property = { };
-        List<Communication> comList = new List<Communication>();
-
         private void ShowAllButton_Click(object sender, EventArgs e)
         {
 
@@ -1340,16 +1354,17 @@ namespace WindowsFormsApp1
         {
             try
             {
-                for (int i = 2; i < 100; i++)
+                for (int i = 1; i < 100; i++)
                 {
-                    Communication tester = comList[comList.Count - i];
+                    Console.WriteLine("here1");
+                    Communication tester = comList.FindIndex(comList.Last.Index - i).Value;
                     if ((tester.message1 == receiver && tester.message2 == sender) ||
                     (tester.message1 == sender && tester.message2 == receiver) ||
                     (tester.message1 == "CQ" && tester.message2 == receiver) ||
                     (tester.message1 == "CQ" && tester.message2 == sender))
                     {
                         tester.childId = id;
-                        try { label1.Text = comList[276].childId.ToString(); } catch { }
+                        //try { label1.Text = comList[276].childId.ToString(); } catch { }
                         CqList_Click(null, null);
 
                         return true;
@@ -1395,7 +1410,9 @@ namespace WindowsFormsApp1
 
             // 選択項目を取得する
             ListViewItem itemx = cqList.SelectedItems[0];
-            Communication com = comList[int.Parse(itemx.Text)];
+
+            Console.WriteLine("here2");
+            Communication com = comList.FindIndex(int.Parse(itemx.Text)).Value;
             Display(com);
             DrawOnMap(cqList, itemx);
         }
@@ -1407,7 +1424,8 @@ namespace WindowsFormsApp1
 
             if (com.childId != 0)
             {
-                Display(comList[com.childId]);
+                Console.WriteLine("here3");
+                Display(comList.FindIndex(com.childId).Value);
             }
         }
 
@@ -1418,6 +1436,7 @@ namespace WindowsFormsApp1
                 return;
             }
             ListViewItem itemx = allList.SelectedItems[0];
+
             DrawOnMap(allList, itemx);
         }
 
@@ -1434,7 +1453,9 @@ namespace WindowsFormsApp1
         private void DrawOnMap(object caller, ListViewItem itemx)
         {
             //Console.WriteLine(itemx.Text);
-            Communication com = comList[int.Parse(itemx.Text)];
+            Console.WriteLine(int.Parse(itemx.Text));
+            Console.WriteLine("here4");
+            Communication com = comList.FindIndex(int.Parse(itemx.Text)).Value;
             try
             {
                 //Console.WriteLine("com.fromC:" + com.fromCountry + ", com.toC:" + com.toCountry);
@@ -1487,7 +1508,7 @@ namespace WindowsFormsApp1
             return count;
         }
 
-        private async void GetLatestComs(DateTime now)
+        private async void GetLatestComs(DateTime utcNow)
         {
             //register newer lines than the standard to latestComsList.
             int isOpenable = 0;
@@ -1496,13 +1517,13 @@ namespace WindowsFormsApp1
                 //ALL.TXTの読み取りを5回試行する
                 try
                 {
-                    using (FileStream fs = new FileStream(@"C:\Users\ouchi\Desktop\testForQSO.txt", FileMode.Open, FileAccess.Read))
+                    using (FileStream fs = new FileStream(@"C:\Users\ouchi\AppData\Local\WSJT-X\ALL.TXT", FileMode.Open, FileAccess.Read))
                     {
                         latestComsArray = new string[0];
                         var str = "";
-                        var index = 0;
+                        var index = 4;
                         var bytes = new List<byte>();
-                        int param = 0;
+                        int param = 1;
                         while (fs.Position >= 0)
                         {
                             fs.Position = fs.Seek(0, SeekOrigin.End) - index;
@@ -1518,7 +1539,10 @@ namespace WindowsFormsApp1
                                 str = Encoding.GetEncoding("Shift_JIS").GetString(bytes.ToArray());
                                 if (CountOf(str, "\r\n") != param)
                                 {
+                                    Console.WriteLine("errararararara:  " + str);
+
                                     string strTime = str.Trim('\r').Trim('\n').Substring(0, 15);
+                                    Console.WriteLine("strTime:  " + strTime);
                                     DateTime candidateTime = new DateTime(
                                        2000 + int.Parse(strTime.Substring(0, 2)),
                                        int.Parse(strTime.Substring(2, 2)),
@@ -1526,8 +1550,18 @@ namespace WindowsFormsApp1
                                        int.Parse(strTime.Substring(7, 2)),
                                        int.Parse(strTime.Substring(9, 2)),
                                        int.Parse(strTime.Substring(11, 2)));
+                                    Console.WriteLine("candidateTime is " + candidateTime.ToString());
+                                    Console.WriteLine("utc is " + utcNow.ToString());
+                                    if (isFirst)
+                                    {
+                                        if (candidateTime < utcNow.AddSeconds(delay - 15))
+                                        {
+                                            delay = -15;
+                                        }
+                                        isFirst = false;
+                                    }
 
-                                    if (candidateTime < now.AddSeconds(-15) || candidateTime > now)
+                                    if (candidateTime < utcNow.AddSeconds(delay - 15) || candidateTime > utcNow.AddSeconds(delay))
                                     {
                                         Console.WriteLine("broken because " + candidateTime.ToString() + " is not appropriate.\n");
                                         break;
@@ -1552,7 +1586,7 @@ namespace WindowsFormsApp1
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("例外処理いいいいい：　" + e.StackTrace);
+                    Console.WriteLine("例外処理いいいいい：　" + e.Message + e.StackTrace);
                     isOpenable++;
                     await Task.Delay(200);
                 }
@@ -1622,6 +1656,7 @@ namespace WindowsFormsApp1
                     isFormat = false
                 };
             }
+            Console.WriteLine("here5");
             comList.Add(com);
 
             bool isChild;
@@ -1633,39 +1668,38 @@ namespace WindowsFormsApp1
             {
                 isChild = ChildApply(com.id, com.message1, com.message2);
             }
-            if (this.InvokeRequired) this.Invoke(new Action<Communication>(this.Addition), com);
-            else Addition(com);
-        }
-
-        private void Addition(Communication com)
-        {
             string[] appear = { com.id.ToString(), com.date.ToString(), com.frequency, com.message1 + " " + com.message2 + " " + com.message3, com.toCountry + " <- " + com.fromCountry };
             allList.Items.Add(new ListViewItem(appear));
+
+            if (!isChild && com.type != -1)
+            {
+                cqList.Items.Add(new ListViewItem(appear));
+            }
+
         }
 
         private void RenewList(object sender, EventArgs e)
         {
             //QSOListを一度すべて削除
             Console.WriteLine("renewal");
-            DateTime nowTime = DateTime.Now;
-            if (InvokeRequired) Invoke(new Action(cqList.Items.Clear));
-            else cqList.Items.Clear();
-            clicktimes = 0;
+            DateTime nowTime = DateTime.UtcNow;
+            Console.WriteLine("here6");
 
             //allListにいくつか存在していて、且つ最上位の交信が一時間以上前に受信したものだった場合
-            while (allList.Items.Count > 0 && nowTime.AddHours(-1) > comList[0].date)
+            while (allList.Items.Count > 0 && nowTime.AddMinutes(-3) > comList.First.Value.date)
             {
                 //最上位の交信を削除
-                comList.RemoveAt(0);
-                if (InvokeRequired) Invoke(new Action(Removal));
-                else allList.Items.RemoveAt(0);
-            }
-            GetLatestComs(DateTime.Now);
-        }
+                //clicktimes = 0;
 
-        private void Removal()
-        {
-            allList.Items.RemoveAt(0);
+                Console.WriteLine("here7");
+                int removalId = comList.First.Index;
+                comList.Remove(comList.First);
+                allList.Items.RemoveAt(0);
+                if (int.Parse(cqList.TopItem.Text) <= removalId) cqList.Items.RemoveAt(0);
+                //cqList.Items.Clear();
+
+            }
+            GetLatestComs(DateTime.UtcNow);
         }
 
         private void mapPanel_SizeChanged(object sender, EventArgs e)
@@ -1679,18 +1713,13 @@ namespace WindowsFormsApp1
             RenewList(null, null);
             Timer renewTimer = new Timer();
             renewTimer.Tick += new EventHandler(RenewList);
-            renewTimer.Interval = 5000;
+            renewTimer.Interval = 15000;
             renewTimer.Start();
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            Console.WriteLine("comの中身は");
 
-            foreach (Communication list in comList)
-            {
-                Console.WriteLine(list.id);
-            }
         }
     }
 }
