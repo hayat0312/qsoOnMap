@@ -14,6 +14,7 @@
         var bounds;
         var lineColor;
         var homeLoc;
+        var entitiesList = [];
 
 
         function GetMap() {
@@ -26,7 +27,7 @@
             });
             //Set corners of ionospheric map.
             bounds = Microsoft.Maps.LocationRect.fromCorners(new Microsoft.Maps.Location(75, -180), new Microsoft.Maps.Location(-75, 180));
-            lineColor = new Microsoft.Maps.Color(0.5, 0, 255, 0);
+            lineColor = new Microsoft.Maps.Color(0.2, 0, 0, 0);
             homeLoc = new Microsoft.Maps.Location(35.70728450934643, 139.70821478976535);
 
             //Define a custom overlay class that inherts from the CustomOverlay class.
@@ -89,31 +90,38 @@
 
         function ClearEntities() {
             map.entities.clear();
+            entitiesList.length = 0;
         }
 
-        function DrawToHome(fromLoc) {
-            Microsoft.Maps.loadModule('Microsoft.Maps.SpatialMath', function () {
+        function DrawToHome(fromLoc, colorCode) {
+            console.log(colorCode);
+            var homeLineColor = Microsoft.Maps.Color.fromHex(colorCode);
+            homeLineColor.a = 0.5;
 
+            Microsoft.Maps.loadModule('Microsoft.Maps.SpatialMath', function () {
                 const homeLocPath = Microsoft.Maps.SpatialMath.getGeodesicPath([homeLoc, fromLoc]);
                 const homeLine = new Microsoft.Maps.Polyline(homeLocPath, {
-                    strokeColor: lineColor,
+                    strokeColor: homeLineColor,
                     strokeThickness: 10,
                 });
                 map.entities.push(homeLine);
+                entitiesList.push("line");
             });
         }
 
-        function PointCQ(lat, lng) {
+        function PointCQ(lat, lng, colorCode) {
             ClearEntities();
             var location = new Microsoft.Maps.Location(lat, lng);
             var pin = new Microsoft.Maps.Pushpin(location, {
                 color: "red",
             });
             map.entities.push(pin);
-            DrawToHome(location);
+            entitiesList.push("pin");
+            DrawToHome(location, colorCode);
         }
 
-        function DrawLine(toLat, toLng, fromLat, fromLng, isDynamic) {
+        function DrawLineDynamicly(toLat, toLng, fromLat, fromLng, colorCode) {
+
             ClearEntities();
             Microsoft.Maps.loadModule('Microsoft.Maps.SpatialMath', function () {
 
@@ -132,58 +140,123 @@
 
                 var pins = [];
 
-                if (isDynamic) {
-                    //execute when allList or detailList clicked.
-                    while (leftDistance > 0) {
-                        leftDistance -= distance / 10;
+                //execute when allList or detailList clicked.
+                while (leftDistance > 0) {
+                    leftDistance -= distance / 10;
 
-                        var pointLoc = Microsoft.Maps.SpatialMath.getLocationAlongPath(actualLine, leftDistance, Microsoft.Maps.SpatialMath.DistanceUnits.Kilometers);
-                        var pin = new Microsoft.Maps.Pushpin(pointLoc, {
-                            color: "red",
-                            visible: false
-                        });
-                        pins.push(pin);
-                    }
-                    map.entities.push(actualLine);
-                    DrawToHome(fromLoc);
-                    map.entities.push(pins);
-
-
-                    //Display pins every 0.5s.
-                    var i = 0;
-                    setInterval(() => {
-                        if (i == pins.length) {
-                            pins.map(function (value) {
-                                value.setOptions({ visible: false })
-                            });
-                            i = 0;
-                        }
-                        pins[i].setOptions({ visible: true });
-                        i++;
-                    }, 500);
+                    var pointLoc = Microsoft.Maps.SpatialMath.getLocationAlongPath(actualLine, leftDistance, Microsoft.Maps.SpatialMath.DistanceUnits.Kilometers);
+                    var pin = new Microsoft.Maps.Pushpin(pointLoc, {
+                        color: "red",
+                        visible: false                                              
+                    });
+                    pins.push(pin);
                 }
-                else {
-                    //execute when cqList clicked
+                map.entities.push(actualLine);
+                entitiesList.push("line");
+                DrawToHome(fromLoc, colorCode);
+                map.entities.push(pins);
+                entitiesList.push("pin");
 
-                    while (leftDistance > 0) {
-                        leftDistance -= distance / 10;
 
-                        var pointLoc = Microsoft.Maps.SpatialMath.getLocationAlongPath(polyline, leftDistance, Microsoft.Maps.SpatialMath.DistanceUnits.Kilometers);
-                        var pin = new Microsoft.Maps.Pushpin(pointLoc, {
-                            color: "red",
-                            visible: true
+                //Display pins every 0.5s.
+                var i = 0;
+                setInterval(() => {
+                    if (i == pins.length) {
+                        pins.map(function (value) {
+                            value.setOptions({ visible: false })
                         });
-                        pins.push(pin);
+                        i = 0;
                     }
-
-
-                    map.entities.push(actualLine);
-                    DrawToHome(fromLoc);
-                    map.entities.push(pins);
-                }
+                    pins[i].setOptions({ visible: true });
+                    i++;
+                }, 500);
             });
         }
 
+        function DrawLineStaticly(toLat, toLng, fromLat, fromLng, colorCode) {
+            console.log("where");
+
+            ClearEntities();
+            Microsoft.Maps.loadModule('Microsoft.Maps.SpatialMath', function () {
+
+                var fromLoc = new Microsoft.Maps.Location(fromLat, fromLng);
+                var toLoc = new Microsoft.Maps.Location(toLat, toLng);
+                const actualLocPath = Microsoft.Maps.SpatialMath.getGeodesicPath([toLoc, fromLoc]);
+                const actualLine = new Microsoft.Maps.Polyline(actualLocPath, {
+                    strokeColor: lineColor,
+                    strokeThickness: 10,
+                });
+
+
+                var distance = Microsoft.Maps.SpatialMath.getDistanceTo(toLoc, fromLoc, Microsoft.Maps.SpatialMath.DistanceUnits.Kilometers);
+
+                var leftDistance = distance;
+
+                var pins = [];
+
+                //execute when cqList clicked
+                while (leftDistance > 0) {
+                    leftDistance -= distance / 10;
+
+                    var pointLoc = Microsoft.Maps.SpatialMath.getLocationAlongPath(actualLine, leftDistance, Microsoft.Maps.SpatialMath.DistanceUnits.Kilometers);
+                    var pin = new Microsoft.Maps.Pushpin(pointLoc, {
+                        color: "red",
+                        visible: true
+                    });
+                    pins.push(pin);
+                }
+
+
+                map.entities.push(actualLine);
+                entitiesList.push("line");
+                DrawToHome(fromLoc, colorCode);
+                map.entities.push(pins);
+                entitiesList.push("pin");
+            });
+        }
+
+        function DrawForAll(toLat, toLng, fromLat, fromLng, isDynamic, colorCode) {
+            Microsoft.Maps.loadModule('Microsoft.Maps.SpatialMath', function () {
+
+                var fromLoc = new Microsoft.Maps.Location(fromLat, fromLng);
+                var toLoc = new Microsoft.Maps.Location(toLat, toLng);
+                const actualLocPath = Microsoft.Maps.SpatialMath.getGeodesicPath([toLoc, fromLoc]);
+                const actualLine = new Microsoft.Maps.Polyline(actualLocPath, {
+                    strokeColor: lineColor,
+                    strokeThickness: 10,
+                });
+
+                map.entities.push(actualLine);
+                entitiesList.push("line");
+                DrawToHome(fromLoc, colorCode);
+            });
+        }
+
+        function DrawForAllCQ(lat, lng, colorCode) {
+            var location = new Microsoft.Maps.Location(lat, lng);
+            DrawToHome(location, colorCode);
+        }
+
+        function RemoveFirstEntitie(type) {
+            var count;
+            switch (type) {
+                case -1:
+                    count = 0;
+                    break;
+                case 0:
+                    count = 1;
+                    break;
+                default:
+                    count = 2;
+                    break;
+            }
+            for (let i = 0; i < count; i++) {
+                map.entities.removeAt(0);
+                entitiesList.shift();
+            }
+
+            //for (let i = 0; i < map.entities.getLength(); i++) console.log(entitiesList[i]);
+        }
     </script>
 </head>
 

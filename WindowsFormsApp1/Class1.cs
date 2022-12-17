@@ -36,11 +36,6 @@ namespace WindowsFormsApp1
             {
                 while (node != null && node.Index != x)
                 {
-                    Console.WriteLine("cycling");
-                    Console.WriteLine(node != null);
-                    Console.WriteLine(node.Index);
-
-
                     node = node.Next;
                 }
                 return node;
