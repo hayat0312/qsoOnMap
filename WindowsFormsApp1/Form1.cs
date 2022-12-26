@@ -60,8 +60,7 @@ namespace WindowsFormsApp1
             mapPanel.Width = (int)(mapPanel.Height * 432 / 279);
 
             occarTime = DateTime.Now;
-            button1_Click(null, null);
-            //AccesserTest();
+            Form1_SizeChanged(null, null);
         }
 
         private void OnBrowserFrameLoadEnd(object sender, FrameLoadEndEventArgs args)
@@ -75,6 +74,7 @@ namespace WindowsFormsApp1
                     .ExecuteJavaScriptAsync(
                     "document.body.style.overflow = 'hidden'");
             }
+
         }
 
         private void ResisterCountry()
@@ -1196,6 +1196,7 @@ namespace WindowsFormsApp1
             ColumnHeader columnNumber = new ColumnHeader();
             ColumnHeader columnName = new ColumnHeader();
             ColumnHeader columnType = new ColumnHeader();
+            ColumnHeader columnSnr = new ColumnHeader();
             ColumnHeader columnData = new ColumnHeader();
             ColumnHeader columnDirection = new ColumnHeader();
 
@@ -1205,102 +1206,104 @@ namespace WindowsFormsApp1
             columnName.Width = 120;
             columnType.Text = "タイプ";
             columnType.Width = 45;
+            columnSnr.Text = "snr";
+            columnSnr.Width = 45;
             columnData.Text = "メッセージ";
             columnData.Width = 150;
             columnDirection.Text = "向き";
             columnDirection.Width = 200;
             ColumnHeader[] colHeaderRegValue =
-              {columnNumber, columnName, columnType, columnData, columnDirection};
+              {columnNumber, columnName, columnType, columnSnr, columnData, columnDirection};
             detailList.Columns.AddRange(colHeaderRegValue);
         }
 
-        private void ShowAllButton_Click(object sender, EventArgs e)
-        {
-
-            using (StreamReader sr = new StreamReader(
-                "C:\\Users\\ouchi\\Desktop\\testForQSO.txt", Encoding.GetEncoding("Shift_JIS")))
-            {
-                //for (int i = 0; i < 10000; i++) sr.ReadLine();
-                for (int all = 1; all < 100; all++)
-                {
-                    clicktimes++;
-                    string line = "";
-
-                    line = sr.ReadLine();
-
-                    property = line.Split(new string[] { " ", "　" }, StringSplitOptions.RemoveEmptyEntries);
-
-                    int type = -1;
-                    Communication com = null;
-                    if (property.Length == 10)
-                    {
-                        type = AnalyzeType(property[7], property[8], property[9]);
-                        //Console.Write(type.ToString());
-                        //categorize(property[7], property[8], property[9]);
-                        string toCountry = FindCountry(property[7]);
-                        string fromCountry = FindCountry(property[8]);
-                        latestTime = new DateTime(
-                                2000 + int.Parse(property[0].Substring(0, 2)),
-                                int.Parse(property[0].Substring(2, 2)),
-                                int.Parse(property[0].Substring(4, 2)),
-                                int.Parse(property[0].Substring(7, 2)),
-                                int.Parse(property[0].Substring(9, 2)),
-                                int.Parse(property[0].Substring(11, 2)));
-                        com = new Communication
-                        {
-                            id = clicktimes - 1,
-                            date = latestTime,
-                            frequency = property[1],
-                            type = type,
-                            message1 = property[7],
-                            message2 = property[8],
-                            message3 = property[9],
-                            toCountry = toCountry,
-                            fromCountry = fromCountry,
-                            childId = 0,
-                        };
-                    }
-                    else
-                    {
-                        com = new Communication
-                        {
-                            id = clicktimes - 1,
-                            date = latestTime,
-                            frequency = "",
-                            type = type,
-                            message1 = "",
-                            message2 = "",
-                            message3 = "",
-                            toCountry = "",
-                            fromCountry = "",
-                            childId = 0,
-                        };
-                    }
-                    comList.Add(com);
-
-
-                    bool isChild;
-                    if (type == 0 || type == -1)
-                    {
-                        isChild = false;
-                    }
-                    else
-                    {
-                        isChild = ChildApply(com.id, com.message1, com.message2);
-                    }
-                    string[] appear = { com.id.ToString(), com.date.ToString(), com.frequency, com.message1 + " " + com.message2 + " " + com.message3, com.toCountry + " <- " + com.fromCountry };
-                    allList.Items.Add(new ListViewItem(appear));
-                    if (!isChild && com.type != -1)
-                    {
-                        cqList.Items.Add(new ListViewItem(appear));
-                    }
-
-
-                    //Console.WriteLine(comList[0].id.ToString());
-                    //await Task.Delay(100);
-                }
-            }
-        }
+        //        private void ShowAllButton_Click(object sender, EventArgs e)
+        //        {
+        //
+        //            using (StreamReader sr = new StreamReader(
+        //                "C:\\Users\\ouchi\\Desktop\\testForQSO.txt", Encoding.GetEncoding("Shift_JIS")))
+        //            {
+        //                //for (int i = 0; i < 10000; i++) sr.ReadLine();
+        //                for (int all = 1; all < 100; all++)
+        //                {
+        //                    clicktimes++;
+        //                    string line = "";
+        //
+        //                    line = sr.ReadLine();
+        //
+        //                    property = line.Split(new string[] { " ", "　" }, StringSplitOptions.RemoveEmptyEntries);
+        //
+        //                    int type = -1;
+        //                    Communication com = null;
+        //                    if (property.Length == 10)
+        //                    {
+        //                        type = AnalyzeType(property[7], property[8], property[9]);
+        //                        //Console.Write(type.ToString());
+        //                        //categorize(property[7], property[8], property[9]);
+        //                        string toCountry = FindCountry(property[7]);
+        //                        string fromCountry = FindCountry(property[8]);
+        //                        latestTime = new DateTime(
+        //                                2000 + int.Parse(property[0].Substring(0, 2)),
+        //                                int.Parse(property[0].Substring(2, 2)),
+        //                                int.Parse(property[0].Substring(4, 2)),
+        //                                int.Parse(property[0].Substring(7, 2)),
+        //                                int.Parse(property[0].Substring(9, 2)),
+        //                                int.Parse(property[0].Substring(11, 2)));
+        //                        com = new Communication
+        //                        {
+        //                            id = clicktimes - 1,
+        //                            date = latestTime,
+        //                            frequency = property[1],
+        //                            type = type,
+        //                            message1 = property[7],
+        //                            message2 = property[8],
+        //                            message3 = property[9],
+        //                            toCountry = toCountry,
+        //                            fromCountry = fromCountry,
+        //                            childId = 0,
+        //                        };
+        //                    }
+        //                    else
+        //                    {
+        //                        com = new Communication
+        //                        {
+        //                            id = clicktimes - 1,
+        //                            date = latestTime,
+        //                            frequency = "",
+        //                            type = type,
+        //                            message1 = "",
+        //                            message2 = "",
+        //                            message3 = "",
+        //                            toCountry = "",
+        //                            fromCountry = "",
+        //                            childId = 0,
+        //                        };
+        //                    }
+        //                    comList.Add(com);
+        //
+        //
+        //                    bool isChild;
+        //                    if (type == 0 || type == -1)
+        //                    {
+        //                        isChild = false;
+        //                    }
+        //                    else
+        //                    {
+        //                        isChild = ChildApply(com);
+        //                    }
+        //                    string[] appear = { com.id.ToString(), com.date.ToString(), com.frequency, com.message1 + " " + com.message2 + " " + com.message3, com.toCountry + " <- " + com.fromCountry };
+        //                    allList.Items.Add(new ListViewItem(appear));
+        //                    if (!isChild && com.type != -1)
+        //                    {
+        //                        cqList.Items.Add(new ListViewItem(appear));
+        //                    }
+        //
+        //
+        //                    //Console.WriteLine(comList[0].id.ToString());
+        //                    //await Task.Delay(100);
+        //                }
+        //            }
+        //        }
 
         private string FindCountry(string callsign)
         {
@@ -1383,10 +1386,12 @@ namespace WindowsFormsApp1
             }
         }
 
-        private bool ChildApply(int id, string receiver, string sender)
+        private bool ChildApply(Communication com)
         {
             try
             {
+                string receiver = com.message1;
+                string sender = com.message2;
                 for (int i = 1; i < 20; i++)
                 {
                     Communication tester = comList.FindIndex(comList.Last.Index - i).Value;
@@ -1395,7 +1400,8 @@ namespace WindowsFormsApp1
                     (tester.message1 == "CQ" && tester.message2 == receiver) ||
                     (tester.message1 == "CQ" && tester.message2 == sender))
                     {
-                        tester.childId = id;
+                        tester.childId = com.id;
+                        com.parentId = tester.id;
                         //try { label1.Text = comList[276].childId.ToString(); } catch { }
                         CqList_Click(null, null);
 
@@ -1452,7 +1458,7 @@ namespace WindowsFormsApp1
 
         private void Display(Communication com)
         {
-            string[] appear = { com.id.ToString(), com.date.ToString(), com.type.ToString(), com.message1 + " " + com.message2 + " " + com.message3, com.toCountry + " <- " + com.fromCountry };
+            string[] appear = { com.id.ToString(), com.date.ToString(), com.type.ToString(), com.reportedSnr.ToString(), com.message1 + " " + com.message2 + " " + com.message3, com.toCountry + " <- " + com.fromCountry };
             detailList.Items.Add(new ListViewItem(appear));
 
             if (com.childId != 0)
@@ -1490,7 +1496,6 @@ namespace WindowsFormsApp1
 
         private void DrawOnMap(object caller, Communication com)
         {
-            Console.WriteLine("called from " + caller);
             try
             {
                 //Console.WriteLine("com.fromC:" + com.fromCountry + ", com.toC:" + com.toCountry);
@@ -1505,39 +1510,33 @@ namespace WindowsFormsApp1
                     return;
                 }
 
-                Console.WriteLine("fromLat:" + fromLat.ToString() + ", fromLng:" + fromLng.ToString());
-                string colorCode = CcExchanger(com.snr);
+                string colorToHome = CcExchanger(com.mySnr);
+                string colorActually = CcExchanger(com.reportedSnr);
 
                 if (com.type == 0)
                 {
                     if (caller == null)
                     {
-                        cefBrowser.ExecuteScriptAsync("DrawForAllCQ(" + fromLat + " ," + fromLng + " , true, \"" + colorCode + "\");");
-                        Console.WriteLine("type0 の " + com.id.ToString() + "を表示");
+                        cefBrowser.ExecuteScriptAsync("DrawForAllCQ(" + fromLat + " ," + fromLng + " , true, \"" + colorToHome + "\");");
                     }
-                    else cefBrowser.ExecuteScriptAsync("PointCQ(" + fromLat + ", " + fromLng + ", \"" + colorCode + "\");");
+                    else cefBrowser.ExecuteScriptAsync("PointCQ(" + fromLat + ", " + fromLng + ", \"" + colorToHome + "\");");
                 }
                 else
                 {
-                    Console.WriteLine("type" + com.type.ToString() + " の " + com.id.ToString() + "を表示");
 
                     if (caller == null)
                     {
-                        cefBrowser.ExecuteScriptAsync("DrawForAll(" + toLat + " ," + toLng + ", " + fromLat + " ," + fromLng + " , true, \"" + colorCode + "\");");
+                        cefBrowser.ExecuteScriptAsync("DrawForAll(" + toLat + " ," + toLng + ", " + fromLat + " ," + fromLng + " , true, \"" + colorToHome + "\", \"" + colorActually + "\");");
                     }
                     else
                     {
-                        Console.WriteLine("toLat:" + toLat.ToString() + ", toLng:" + toLng.ToString());
-                        Console.WriteLine("fromLat:" + fromLat.ToString() + ", fromLng:" + fromLng.ToString());
                         if (caller == allList || caller == detailList)
                         {
-                            Console.WriteLine("DrawLineDynamicly(" + toLat + ", " + toLng + ", " + fromLat + ", " + fromLng + ", \"" + colorCode + "\");");
-
-                            cefBrowser.ExecuteScriptAsync("DrawLineDynamicly(" + toLat + ", " + toLng + ", " + fromLat + ", " + fromLng + ", \"" + colorCode + "\");");
+                            cefBrowser.ExecuteScriptAsync("DrawLineDynamicly(" + toLat + ", " + toLng + ", " + fromLat + ", " + fromLng + ", \"" + colorToHome + "\", \"" + colorActually + "\");");
                         }
                         else //caller == cqList
                         {
-                            cefBrowser.ExecuteScriptAsync("DrawLineStaticly(" + toLat + ", " + toLng + ", " + fromLat + ", " + fromLng + ", \"" + colorCode + "\");");
+                            cefBrowser.ExecuteScriptAsync("DrawLineStaticly(" + toLat + ", " + toLng + ", " + fromLat + ", " + fromLng + ", \"" + colorToHome + "\", \"" + colorActually + "\");");
                         }
                     }
                 }
@@ -1601,10 +1600,8 @@ namespace WindowsFormsApp1
                                 str = Encoding.GetEncoding("Shift_JIS").GetString(bytes.ToArray());
                                 if (CountOf(str, "\r\n") != param)
                                 {
-                                    Console.WriteLine("errararararara:  " + str);
 
                                     string strTime = str.Trim('\r').Trim('\n').Substring(0, 15);
-                                    Console.WriteLine("strTime:  " + strTime);
                                     DateTime candidateTime = new DateTime(
                                        2000 + int.Parse(strTime.Substring(0, 2)),
                                        int.Parse(strTime.Substring(2, 2)),
@@ -1612,8 +1609,6 @@ namespace WindowsFormsApp1
                                        int.Parse(strTime.Substring(7, 2)),
                                        int.Parse(strTime.Substring(9, 2)),
                                        int.Parse(strTime.Substring(11, 2)));
-                                    Console.WriteLine("candidateTime is " + candidateTime.ToString());
-                                    Console.WriteLine("utc is " + utcNow.ToString());
                                     if (isFirst)
                                     {
                                         if (candidateTime < utcNow.AddSeconds(delay - 15))
@@ -1625,7 +1620,6 @@ namespace WindowsFormsApp1
 
                                     if (candidateTime < utcNow.AddSeconds(delay - 15) || candidateTime > utcNow.AddSeconds(delay))
                                     {
-                                        Console.WriteLine("broken because " + candidateTime.ToString() + " is not appropriate.\n");
                                         break;
                                     }
                                     string temp = string.Copy(str);
@@ -1658,8 +1652,6 @@ namespace WindowsFormsApp1
             //新規に受信した交信があった場合
             while (latestComsList.Count > 0)
             {
-                Console.WriteLine(latestComsList[0]);
-
                 AddComList(latestComsList[0]);
                 clicktimes++;
                 latestComsList.RemoveAt(0);
@@ -1699,9 +1691,9 @@ namespace WindowsFormsApp1
                     message3 = property[9],
                     toCountry = toCountry,
                     fromCountry = fromCountry,
-                    childId = 0,
-                    snr = int.Parse(property[4])
+                    mySnr = int.Parse(property[4]),
                 };
+
             }
             else
             {
@@ -1716,7 +1708,6 @@ namespace WindowsFormsApp1
                     message3 = "",
                     toCountry = "",
                     fromCountry = "",
-                    childId = 0,
                 };
             }
             comList.Add(com);
@@ -1728,18 +1719,107 @@ namespace WindowsFormsApp1
             }
             else
             {
-                isChild = ChildApply(com.id, com.message1, com.message2);
+                isChild = ChildApply(com);
             }
+            AnalyzeSnr(com);
+
             string[] appear = { com.id.ToString(), com.date.ToString(), com.frequency, com.message1 + " " + com.message2 + " " + com.message3, com.toCountry + " <- " + com.fromCountry };
             allList.Items.Add(new ListViewItem(appear));
 
             if (com.type != -1)
             {
                 if (!isChild) cqList.Items.Add(new ListViewItem(appear));
-                if (!button2.Enabled) DrawOnMap(null, com);
             }
         }
 
+        private void AnalyzeSnr(Communication com)
+        {
+            string report = com.message3;
+            //int type = com.type;
+            //int snr;
+            Communication parent = com;
+            if (com.parentId == 0) return;
+            switch (com.type)
+            {
+                case 30:
+                    com.opSnr = int.Parse(report);
+                    while (parent.parentId != 0)
+                    {
+                        //Console.WriteLine("30きてるよ！");
+                        parent = comList.FindIndex(parent.parentId).Value;
+                        if (parent.message2 == com.message1)
+                        {
+                            parent.reportedSnr = com.opSnr;
+                            break;
+                        }
+                    }
+                    break;
+
+                case 45:
+                    com.opSnr = int.Parse(report.Substring(1));
+                    while (parent.parentId != 0)
+                    {
+                        //Console.WriteLine("45きてるよ！");
+                        parent = comList.FindIndex(parent.parentId).Value;
+                        if (parent.message2 == com.message1)
+                        {
+                            if (parent.type == 30)
+                            {
+                                com.reportedSnr = parent.opSnr;
+                                Console.WriteLine("アミバチャンス45" + com.reportedSnr.ToString());
+                            }
+                            parent.reportedSnr = com.opSnr;
+                            break;
+                        }
+                    }
+                    break;
+
+                default:
+                    while (parent.parentId != 0)
+                    {
+                        //Console.WriteLine("defaultきてるよ！" + com.id.ToString() + " parent " + parent.parentId.ToString());
+                        parent = comList.FindIndex(parent.parentId).Value;
+                        if (parent.message2 == com.message2 && parent.reportedSnr != 100)
+                        {
+                            com.reportedSnr = parent.reportedSnr;
+                            break;
+                        }
+                    }
+                    break;
+            }
+            //            Communication parent = com;
+            //            while (parent.parentId != 0)
+            //            {
+            //                parent = comList.FindIndex(parent.parentId).Value;
+            //                Console.WriteLine("futurefuture");
+            //                if (parent.message2 == com.message2 && parent.reportedSnr != 100) com.reportedSnr = parent.reportedSnr;
+            //                else parent = comList.FindIndex(parent.parentId).Value;
+            //            }
+            //
+            //            if (type == 30)
+            //            {
+            //                snr = int.Parse(report);
+            //                ApplySnrToPast(com, snr, com.message1);
+            //            }
+            //            else if (type == 45)
+            //            {
+            //                snr = int.Parse(report.Substring(1));
+            //                ApplySnrToPast(com, snr, com.message1);
+            //            }
+        }
+        //
+        //        private void ApplySnrToPast(Communication cycle, int sharedSnr, string callsign)
+        //        {
+        //            Console.WriteLine("pastpast");
+        //            if (cycle.message2 == callsign) cycle.reportedSnr = sharedSnr;
+        //            if (cycle.parentId == 0) return;
+        //            else
+        //            {
+        //                cycle = comList.FindIndex(cycle.parentId).Value;
+        //                ApplySnrToPast(cycle, sharedSnr, callsign);
+        //            }
+        //        }
+        //
         private void RenewList(object sender, EventArgs e)
         {
             //QSOListを一度すべて削除
@@ -1753,7 +1833,6 @@ namespace WindowsFormsApp1
                 //clicktimes = 0;
 
                 int removalId = comList.First.Index;
-                cefBrowser.ExecuteScriptAsync("RemoveFirstEntitie(" + comList.First.Value.type + ")");
                 comList.Remove(comList.First);
                 allList.Items.RemoveAt(0);
 
@@ -1765,6 +1844,19 @@ namespace WindowsFormsApp1
                 //cqList.Items.Clear();
             }
             GetLatestComs(DateTime.UtcNow);
+
+            if (!button2.Enabled)
+            {
+                cefBrowser.ExecuteScriptAsync("ClearEntities()");
+                foreach (Communication com in comList)
+                {
+                    try
+                    {
+                        DrawOnMap(null, com);
+                    }
+                    catch { }
+                }
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -1778,6 +1870,7 @@ namespace WindowsFormsApp1
 
         private void button2_Click(object sender, EventArgs e)
         {
+            if (button2.Text == "自動運用開始") button1_Click(null, null);
             button2.Enabled = false;
             button2.Text = "自動運用中";
             allList.SelectedItems.Clear();
@@ -1797,10 +1890,6 @@ namespace WindowsFormsApp1
 
         private void button3_Click(object sender, EventArgs e)
         {
-            string hello = "hello";
-            cefBrowser.ExecuteScriptAsync("stringTest(\"" + hello + "\");");
-            return;
-
             removalTime = int.Parse(textBox1.Text);
         }
 
@@ -1821,7 +1910,7 @@ namespace WindowsFormsApp1
 
         private string CcExchanger(int snr)
         {
-            int index = (int)((snr + 51) * 12.75f);
+            int index = (int)((snr + 24) * 25.5f);
             int remainder = (index - 1) % 255 + 1;
             int colorType = (index - 1) / 255 + 1;
             string initialFormat = "#{0:X2}{1:X2}{2:X2}";
@@ -1871,7 +1960,11 @@ namespace WindowsFormsApp1
                         255 - remainder);
                     break;
                 default:
-                    colorCode = null;
+                    colorCode = string.Format(
+                        initialFormat,
+                        0,
+                        0,
+                        0);
                     break;
             }
             return colorCode;

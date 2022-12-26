@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 
 namespace WindowsFormsApp1
@@ -42,7 +41,6 @@ namespace WindowsFormsApp1
             }
             else
             {
-                Console.WriteLine(x.ToString() + " is not proper num.\nFirst.Index is " + First.Index.ToString() + " Last.Index is " + Last.Index.ToString());
                 return null;
             };
         }

@@ -12,7 +12,7 @@
 
         var map;
         var bounds;
-        var lineColor;
+        var defaulThickness;
         var homeLoc;
         var entitiesList = [];
 
@@ -27,7 +27,7 @@
             });
             //Set corners of ionospheric map.
             bounds = Microsoft.Maps.LocationRect.fromCorners(new Microsoft.Maps.Location(75, -180), new Microsoft.Maps.Location(-75, 180));
-            lineColor = new Microsoft.Maps.Color(0.2, 0, 0, 0);
+            defaulThickness = 1;
             homeLoc = new Microsoft.Maps.Location(35.70728450934643, 139.70821478976535);
 
             //Define a custom overlay class that inherts from the CustomOverlay class.
@@ -93,9 +93,8 @@
             entitiesList.length = 0;
         }
 
-        function DrawToHome(fromLoc, colorCode) {
-            console.log(colorCode);
-            var homeLineColor = Microsoft.Maps.Color.fromHex(colorCode);
+        function DrawToHome(fromLoc, colorToHome) {
+            var homeLineColor = Microsoft.Maps.Color.fromHex(colorToHome);
             homeLineColor.a = 0.5;
 
             Microsoft.Maps.loadModule('Microsoft.Maps.SpatialMath', function () {
@@ -109,7 +108,7 @@
             });
         }
 
-        function PointCQ(lat, lng, colorCode) {
+        function PointCQ(lat, lng, colorToHome) {
             ClearEntities();
             var location = new Microsoft.Maps.Location(lat, lng);
             var pin = new Microsoft.Maps.Pushpin(location, {
@@ -117,20 +116,24 @@
             });
             map.entities.push(pin);
             entitiesList.push("pin");
-            DrawToHome(location, colorCode);
+            DrawToHome(location, colorToHome);
         }
 
-        function DrawLineDynamicly(toLat, toLng, fromLat, fromLng, colorCode) {
+        function DrawLineDynamicly(toLat, toLng, fromLat, fromLng, colorToHome, colorActually) {
 
             ClearEntities();
-            Microsoft.Maps.loadModule('Microsoft.Maps.SpatialMath', function () {
 
+            var lineColor = Microsoft.Maps.Color.fromHex(colorActually);
+            lineColor.a = 0.5;
+            Microsoft.Maps.loadModule('Microsoft.Maps.SpatialMath', function () {
+                var thickness = defaulThickness;
+                if (colorActually == "#000000") thickness = 10;
                 var fromLoc = new Microsoft.Maps.Location(fromLat, fromLng);
                 var toLoc = new Microsoft.Maps.Location(toLat, toLng);
                 const actualLocPath = Microsoft.Maps.SpatialMath.getGeodesicPath([toLoc, fromLoc]);
                 const actualLine = new Microsoft.Maps.Polyline(actualLocPath, {
                     strokeColor: lineColor,
-                    strokeThickness: 10,
+                    strokeThickness: thickness,
                 });
 
 
@@ -153,7 +156,7 @@
                 }
                 map.entities.push(actualLine);
                 entitiesList.push("line");
-                DrawToHome(fromLoc, colorCode);
+                DrawToHome(fromLoc, colorToHome);
                 map.entities.push(pins);
                 entitiesList.push("pin");
 
@@ -173,18 +176,21 @@
             });
         }
 
-        function DrawLineStaticly(toLat, toLng, fromLat, fromLng, colorCode) {
-            console.log("where");
+        function DrawLineStaticly(toLat, toLng, fromLat, fromLng, colorToHome, colorActually) {
 
             ClearEntities();
-            Microsoft.Maps.loadModule('Microsoft.Maps.SpatialMath', function () {
 
+            var lineColor = Microsoft.Maps.Color.fromHex(colorActually);
+            lineColor.a = 0.5;
+            Microsoft.Maps.loadModule('Microsoft.Maps.SpatialMath', function () {
+                var thickness = defaulThickness;
+                if (colorActually == "#000000") thickness = 10;
                 var fromLoc = new Microsoft.Maps.Location(fromLat, fromLng);
                 var toLoc = new Microsoft.Maps.Location(toLat, toLng);
                 const actualLocPath = Microsoft.Maps.SpatialMath.getGeodesicPath([toLoc, fromLoc]);
                 const actualLine = new Microsoft.Maps.Polyline(actualLocPath, {
                     strokeColor: lineColor,
-                    strokeThickness: 10,
+                    strokeThickness: thickness,
                 });
 
 
@@ -209,13 +215,16 @@
 
                 map.entities.push(actualLine);
                 entitiesList.push("line");
-                DrawToHome(fromLoc, colorCode);
+                DrawToHome(fromLoc, colorToHome);
                 map.entities.push(pins);
                 entitiesList.push("pin");
             });
         }
 
-        function DrawForAll(toLat, toLng, fromLat, fromLng, isDynamic, colorCode) {
+        function DrawForAll(toLat, toLng, fromLat, fromLng, isDynamic, colorToHome, colorActually) {
+            var lineColor = Microsoft.Maps.Color.fromHex(colorActually);
+            lineColor.a = 0.5;
+            
             Microsoft.Maps.loadModule('Microsoft.Maps.SpatialMath', function () {
 
                 var fromLoc = new Microsoft.Maps.Location(fromLat, fromLng);
@@ -223,40 +232,23 @@
                 const actualLocPath = Microsoft.Maps.SpatialMath.getGeodesicPath([toLoc, fromLoc]);
                 const actualLine = new Microsoft.Maps.Polyline(actualLocPath, {
                     strokeColor: lineColor,
-                    strokeThickness: 10,
+                    strokeThickness: defaulThickness,
                 });
 
                 map.entities.push(actualLine);
                 entitiesList.push("line");
-                DrawToHome(fromLoc, colorCode);
+                DrawToHome(fromLoc, colorToHome);
             });
         }
 
-        function DrawForAllCQ(lat, lng, colorCode) {
-            var location = new Microsoft.Maps.Location(lat, lng);
-            DrawToHome(location, colorCode);
+        function DrawForAllCQ(lat, lng, stub, colorToHome) {
+
+            Microsoft.Maps.loadModule('Microsoft.Maps.SpatialMath', function () {
+                var location = new Microsoft.Maps.Location(lat, lng);
+                DrawToHome(location, colorToHome);
+            });
         }
 
-        function RemoveFirstEntitie(type) {
-            var count;
-            switch (type) {
-                case -1:
-                    count = 0;
-                    break;
-                case 0:
-                    count = 1;
-                    break;
-                default:
-                    count = 2;
-                    break;
-            }
-            for (let i = 0; i < count; i++) {
-                map.entities.removeAt(0);
-                entitiesList.shift();
-            }
-
-            //for (let i = 0; i < map.entities.getLength(); i++) console.log(entitiesList[i]);
-        }
     </script>
 </head>
 

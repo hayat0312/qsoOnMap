@@ -14,6 +14,9 @@ namespace WindowsFormsApp1
         public string fromCountry { get; set; }
         public string toCountry { get; set; }
         public int childId { get; set; } = 0;
-        public int snr { get; set; } = 0;
+        public int parentId { get; set; } = 0;
+        public int mySnr { get; set; } = 100;
+        public int reportedSnr { get; set; } = 100;
+        public int opSnr { get; set; } = 100;
     }
 }
