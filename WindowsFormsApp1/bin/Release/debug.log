@@ -1,2 +1,4 @@
 [1227/161208.853:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
 [1227/161237.005:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1227/162515.474:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
+[1227/162529.880:ERROR:gles2_cmd_decoder_passthrough.cc(1116)] ContextResult::kFatalFailure: fail_if_major_perf_caveat + swiftshader
