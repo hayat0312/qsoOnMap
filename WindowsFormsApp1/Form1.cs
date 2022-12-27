@@ -1917,6 +1917,8 @@ namespace WindowsFormsApp1
             string colorCode;
             switch (colorType)
             {
+                //"snr" : "color"
+                // -24 : yellow
                 case 0:
                     colorCode = string.Format(
                         initialFormat,
@@ -1924,6 +1926,7 @@ namespace WindowsFormsApp1
                         remainder,
                         0);
                     break;
+                // -24 → -14 : yellow → green
                 case 1:
                     colorCode = string.Format(
                         initialFormat,
@@ -1931,6 +1934,7 @@ namespace WindowsFormsApp1
                         255,
                         0);
                     break;
+                // -14 → -4 : green → cyan
                 case 2:
                     colorCode = string.Format(
                         initialFormat,
@@ -1938,6 +1942,7 @@ namespace WindowsFormsApp1
                         255,
                         remainder);
                     break;
+                // -4 → 6 : cyan → blue
                 case 3:
                     colorCode = string.Format(
                         initialFormat,
@@ -1945,6 +1950,7 @@ namespace WindowsFormsApp1
                         255 - remainder,
                         255);
                     break;
+                // 6 → 16 : blue → magenta
                 case 4:
                     colorCode = string.Format(
                         initialFormat,
@@ -1952,6 +1958,7 @@ namespace WindowsFormsApp1
                         0,
                         255);
                     break;
+                // 16 → 26 : magenta → red
                 case 5:
                     colorCode = string.Format(
                         initialFormat,
@@ -1959,6 +1966,7 @@ namespace WindowsFormsApp1
                         0,
                         255 - remainder);
                     break;
+                //none of the above : black
                 default:
                     colorCode = string.Format(
                         initialFormat,
