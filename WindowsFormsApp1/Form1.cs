@@ -38,7 +38,7 @@ namespace WindowsFormsApp1
 
         public Form1()
         {
-            //this.WindowState = FormWindowState.Maximized;
+            this.WindowState = FormWindowState.Maximized;
 
             InitializeComponent();
 
@@ -1410,7 +1410,7 @@ namespace WindowsFormsApp1
                 }
                 return false;
             }
-            catch
+            catch (Exception e)
             {
                 return false;
             }
@@ -1578,7 +1578,9 @@ namespace WindowsFormsApp1
                 //ALL.TXTの読み取りを5回試行する
                 try
                 {
-                    using (FileStream fs = new FileStream(@"C:\Users\ouchi\AppData\Local\WSJT-X\ALL.TXT", FileMode.Open, FileAccess.Read))
+                    string filePath = "C:\\Users\\" + Environment.UserName + "\\AppData\\Local\\WSJT-X\\ALL.TXT";
+                    Console.WriteLine(filePath + "\n\n");
+                    using (FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Read))
                     {
                         latestComsArray = new string[0];
                         var str = "";
@@ -1977,5 +1979,6 @@ namespace WindowsFormsApp1
             }
             return colorCode;
         }
+
     }
 }
