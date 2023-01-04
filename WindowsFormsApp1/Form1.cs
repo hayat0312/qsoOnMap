@@ -38,7 +38,7 @@ namespace WindowsFormsApp1
 
         public Form1()
         {
-            this.WindowState = FormWindowState.Maximized;
+            WindowState = FormWindowState.Maximized;
 
             InitializeComponent();
 
@@ -57,7 +57,7 @@ namespace WindowsFormsApp1
             InitializeCqList();
             InitializeDetailList();
             mapPanel.Height = 300;
-            mapPanel.Width = (int)(mapPanel.Height * 432 / 279);
+            mapPanel.Width = mapPanel.Height * 432 / 279;
 
             occarTime = DateTime.Now;
             Form1_SizeChanged(null, null);
@@ -74,12 +74,11 @@ namespace WindowsFormsApp1
                     .ExecuteJavaScriptAsync(
                     "document.body.style.overflow = 'hidden'");
             }
-
         }
 
         private void ResisterCountry()
         {
-            //resister callsign data into Dictionaries
+            //callsign prefix -> country name
             countryCode = new Dictionary<string, string>()
                 {
                     {"HB3Y", "Liechtenstein"},
@@ -866,8 +865,7 @@ namespace WindowsFormsApp1
                     {"R", "Russia"},
                     {"W", "United States"},
                 };
-
-
+            //country name -> (lat, lng)
             countryLatlng = new Dictionary<string, (double?, double?)>()
             {
                 {"All", (null, null) },
@@ -1119,6 +1117,7 @@ namespace WindowsFormsApp1
                 {"France (French Guiana)",(3.933889,-53.125782)},
             };
             //resisterd when gridlocator detected
+            //callsign -> (lat, lng)
             callsignLocation = new Dictionary<string, (double?, double?)>()
             {
 
@@ -1217,101 +1216,12 @@ namespace WindowsFormsApp1
             detailList.Columns.AddRange(colHeaderRegValue);
         }
 
-        //        private void ShowAllButton_Click(object sender, EventArgs e)
-        //        {
-        //
-        //            using (StreamReader sr = new StreamReader(
-        //                "C:\\Users\\ouchi\\Desktop\\testForQSO.txt", Encoding.GetEncoding("Shift_JIS")))
-        //            {
-        //                //for (int i = 0; i < 10000; i++) sr.ReadLine();
-        //                for (int all = 1; all < 100; all++)
-        //                {
-        //                    clicktimes++;
-        //                    string line = "";
-        //
-        //                    line = sr.ReadLine();
-        //
-        //                    property = line.Split(new string[] { " ", "　" }, StringSplitOptions.RemoveEmptyEntries);
-        //
-        //                    int type = -1;
-        //                    Communication com = null;
-        //                    if (property.Length == 10)
-        //                    {
-        //                        type = AnalyzeType(property[7], property[8], property[9]);
-        //                        //Console.Write(type.ToString());
-        //                        //categorize(property[7], property[8], property[9]);
-        //                        string toCountry = FindCountry(property[7]);
-        //                        string fromCountry = FindCountry(property[8]);
-        //                        latestTime = new DateTime(
-        //                                2000 + int.Parse(property[0].Substring(0, 2)),
-        //                                int.Parse(property[0].Substring(2, 2)),
-        //                                int.Parse(property[0].Substring(4, 2)),
-        //                                int.Parse(property[0].Substring(7, 2)),
-        //                                int.Parse(property[0].Substring(9, 2)),
-        //                                int.Parse(property[0].Substring(11, 2)));
-        //                        com = new Communication
-        //                        {
-        //                            id = clicktimes - 1,
-        //                            date = latestTime,
-        //                            frequency = property[1],
-        //                            type = type,
-        //                            message1 = property[7],
-        //                            message2 = property[8],
-        //                            message3 = property[9],
-        //                            toCountry = toCountry,
-        //                            fromCountry = fromCountry,
-        //                            childId = 0,
-        //                        };
-        //                    }
-        //                    else
-        //                    {
-        //                        com = new Communication
-        //                        {
-        //                            id = clicktimes - 1,
-        //                            date = latestTime,
-        //                            frequency = "",
-        //                            type = type,
-        //                            message1 = "",
-        //                            message2 = "",
-        //                            message3 = "",
-        //                            toCountry = "",
-        //                            fromCountry = "",
-        //                            childId = 0,
-        //                        };
-        //                    }
-        //                    comList.Add(com);
-        //
-        //
-        //                    bool isChild;
-        //                    if (type == 0 || type == -1)
-        //                    {
-        //                        isChild = false;
-        //                    }
-        //                    else
-        //                    {
-        //                        isChild = ChildApply(com);
-        //                    }
-        //                    string[] appear = { com.id.ToString(), com.date.ToString(), com.frequency, com.message1 + " " + com.message2 + " " + com.message3, com.toCountry + " <- " + com.fromCountry };
-        //                    allList.Items.Add(new ListViewItem(appear));
-        //                    if (!isChild && com.type != -1)
-        //                    {
-        //                        cqList.Items.Add(new ListViewItem(appear));
-        //                    }
-        //
-        //
-        //                    //Console.WriteLine(comList[0].id.ToString());
-        //                    //await Task.Delay(100);
-        //                }
-        //            }
-        //        }
-
         private string FindCountry(string callsign)
         {
+            //return country name by callsign
             try
             {
                 string countryName;
-                //Console.WriteLine(callsign);
-
                 if (callsign == "CQ")
                 {
                     countryName = "All";
@@ -1402,9 +1312,7 @@ namespace WindowsFormsApp1
                     {
                         tester.childId = com.id;
                         com.parentId = tester.id;
-                        //try { label1.Text = comList[276].childId.ToString(); } catch { }
                         CqList_Click(null, null);
-
                         return true;
                     }
                 }
@@ -1809,19 +1717,7 @@ namespace WindowsFormsApp1
             //                ApplySnrToPast(com, snr, com.message1);
             //            }
         }
-        //
-        //        private void ApplySnrToPast(Communication cycle, int sharedSnr, string callsign)
-        //        {
-        //            Console.WriteLine("pastpast");
-        //            if (cycle.message2 == callsign) cycle.reportedSnr = sharedSnr;
-        //            if (cycle.parentId == 0) return;
-        //            else
-        //            {
-        //                cycle = comList.FindIndex(cycle.parentId).Value;
-        //                ApplySnrToPast(cycle, sharedSnr, callsign);
-        //            }
-        //        }
-        //
+
         private void RenewList(object sender, EventArgs e)
         {
             //QSOListを一度すべて削除
