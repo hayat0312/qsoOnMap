@@ -249,12 +249,31 @@
             });
         }
 
+        function sokuchi(toLat, toLng, fromLat, fromLng) {
+            Microsoft.Maps.loadModule('Microsoft.Maps.SpatialMath', function () {
+
+                var fromLoc = new Microsoft.Maps.Location(fromLat, fromLng);
+                var toLoc = new Microsoft.Maps.Location(toLat, toLng);
+                var distance = Microsoft.Maps.SpatialMath.getDistanceTo(toLoc, fromLoc, Microsoft.Maps.SpatialMath.DistanceUnits.Kilometers);
+
+                const actualLocPath = Microsoft.Maps.SpatialMath.getGeodesicPath([toLoc, fromLoc], distance / 500);
+                for (let i = 1; i < distance/500; i++) {
+                    console.log(actualLocPath[i].latitude, actualLocPath[i].longitude);
+                    document.getElementById('outputPanel').innerHTML += actualLocPath[i].latitude + ',' + actualLocPath[i].longitude + '<br/>';
+                }
+                //document.getElementById('outputPanel').innerHTML += '<br/>';
+
+            });
+        }
+
     </script>
 </head>
 
 <body style="margin:0;">
 
-    <div id="myMap" style="width:100%;height:100%;"></div>
+    <div id="myMap" style="position:relative;width:6px;height:4px;"></div>
+    <div id="outputPanel"></div>
+
 
 </body>
 

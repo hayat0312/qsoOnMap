@@ -22,7 +22,6 @@ namespace WindowsFormsApp1
         string mapHtml = @"C:\Users\ouchi\source\repos\WindowsFormsApp1\WindowsFormsApp1\testMap.html";
         ChromiumWebBrowser cefBrowser;
         CefSettings settings;
-        DateTime occarTime;
         DateTime latestTime = DateTime.Now;
         bool isFirst = true;
         int delay = 0;
@@ -59,7 +58,6 @@ namespace WindowsFormsApp1
             mapPanel.Height = 300;
             mapPanel.Width = mapPanel.Height * 432 / 279;
 
-            occarTime = DateTime.Now;
             Form1_SizeChanged(null, null);
         }
 
@@ -1876,5 +1874,42 @@ namespace WindowsFormsApp1
             return colorCode;
         }
 
+        private void button4_Click(object sender, EventArgs e)
+        {
+            List<float> latlngs = new List<float>();
+            StreamReader sr = new StreamReader(@"C:\Users\ouchi\Desktop\研究\latlngs.txt", Encoding.GetEncoding("Shift_JIS"));
+
+            try
+            {
+                while (true)
+                {
+                    string receiverLat = sr.ReadLine();
+                    latlngs.Add(float.Parse(receiverLat));
+                    string receiverLng = sr.ReadLine();
+                    latlngs.Add(float.Parse(receiverLng));
+                    string senderLat = sr.ReadLine();
+                    latlngs.Add(float.Parse(senderLat));
+                    string senderLng = sr.ReadLine();
+                    latlngs.Add(float.Parse(senderLng));
+                    sr.ReadLine();
+                }
+            }
+            catch
+            {
+
+            }
+
+
+
+            sr.Close();
+
+            for (int i = 0; i < latlngs.Count / 4; i++)
+            {
+                int counter = 4 * i;
+                Console.WriteLine(latlngs[i]);
+                cefBrowser.ExecuteScriptAsync("sokuchi(" + latlngs[counter] + ", " + latlngs[counter + 1] + ", " + latlngs[counter + 2] + ", " + latlngs[counter + 3] + ");");
+            }
+
+        }
     }
 }
