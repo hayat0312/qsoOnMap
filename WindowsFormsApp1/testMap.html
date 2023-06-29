@@ -93,15 +93,51 @@
             entitiesList.length = 0;
         }
 
-        function DrawToHome(fromLoc, colorToHome) {
-            var homeLineColor = Microsoft.Maps.Color.fromHex(colorToHome);
-            homeLineColor.a = 0.5;
+//        function DrawToHome(fromLoc, colorToHome) {
+//            var homeLineColor = Microsoft.Maps.Color.fromHex(colorToHome);
+//            homeLineColor.a = 0.5;
+//
+//            Microsoft.Maps.loadModule('Microsoft.Maps.SpatialMath', function () {
+//                const homeLocPath = Microsoft.Maps.SpatialMath.getGeodesicPath([homeLoc, fromLoc]);
+//                const homeLine = new Microsoft.Maps.Polyline(homeLocPath, {
+//                    //strokeColor: homeLineColor,
+//                    //strokeThickness: 10,
+//                });
+//                map.entities.push(homeLine);
+//                entitiesList.push("line");
+//            });
+//        }
+
+        function DrawToHome(fromLoc, colorToHome, rigName) {
+            var homeLineColor = "black";
+           
+
+            if (rigName == "VB") {
+                homeLoc = new Microsoft.Maps.Location(52.23972114153102, 6.849822186312114);
+                homeLineColor = "pink";
+            }
+            else if (rigName == "VBA") {
+                homeLoc = new Microsoft.Maps.Location(-38.37706080471211, -60.27551340310305);
+                homeLineColor = "green";
+            }
+            else if (rigName == "VBB") {
+                homeLoc = new Microsoft.Maps.Location(34.55696215480888, -84.00075302001254);
+                homeLineColor = "blue";
+            }
+            else if (rigName == "VBC") {
+                homeLoc = new Microsoft.Maps.Location(35.2444881779522, 24.809061905270507);
+                homeLineColor = "yellow";
+            }
+            else if (rigName == "VBD") {
+                homeLoc = new Microsoft.Maps.Location(52.28843765284593, 104.28981494645902);
+                homeLineColor = "red";
+            }
 
             Microsoft.Maps.loadModule('Microsoft.Maps.SpatialMath', function () {
                 const homeLocPath = Microsoft.Maps.SpatialMath.getGeodesicPath([homeLoc, fromLoc]);
                 const homeLine = new Microsoft.Maps.Polyline(homeLocPath, {
                     strokeColor: homeLineColor,
-                    strokeThickness: 10,
+                    //strokeThickness: 10,
                 });
                 map.entities.push(homeLine);
                 entitiesList.push("line");
@@ -221,9 +257,25 @@
             });
         }
 
-        function DrawForAll(toLat, toLng, fromLat, fromLng, isDynamic, colorToHome, colorActually) {
-            var lineColor = Microsoft.Maps.Color.fromHex(colorActually);
-            lineColor.a = 0.5;
+        function DrawForAll(toLat, toLng, fromLat, fromLng, rigName, colorToHome, colorActually) {
+            var lineColor;
+
+            if (rigName == "VB") {
+                lineColor = "pink";
+            }
+            else if (rigName == "VBA") {
+                lineColor = "green";
+            }
+            else if (rigName == "VBB") {
+                lineColor = "blue";
+            }
+            else if (rigName == "VBC") {
+                lineColor = "yellow";
+            }
+            else if (rigName == "VBD") {
+                lineColor = "red";
+            }
+
             
             Microsoft.Maps.loadModule('Microsoft.Maps.SpatialMath', function () {
 
@@ -232,20 +284,20 @@
                 const actualLocPath = Microsoft.Maps.SpatialMath.getGeodesicPath([toLoc, fromLoc]);
                 const actualLine = new Microsoft.Maps.Polyline(actualLocPath, {
                     strokeColor: lineColor,
-                    strokeThickness: defaulThickness,
+                    //strokeThickness: defaulThickness,
                 });
 
                 map.entities.push(actualLine);
                 entitiesList.push("line");
-                DrawToHome(fromLoc, colorToHome);
+                DrawToHome(fromLoc, colorToHome, rigName);
             });
         }
 
-        function DrawForAllCQ(lat, lng, stub, colorToHome) {
+        function DrawForAllCQ(lat, lng, rigName, colorToHome) {
 
             Microsoft.Maps.loadModule('Microsoft.Maps.SpatialMath', function () {
                 var location = new Microsoft.Maps.Location(lat, lng);
-                DrawToHome(location, colorToHome);
+                DrawToHome(location, colorToHome, rigName);
             });
         }
 

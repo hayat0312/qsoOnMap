@@ -1,7 +1,11 @@
 ﻿using CefSharp;
 using CefSharp.WinForms;
+using Firebase.Database;
+using Firebase.Database.Query;
+using qsoOnMap;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -29,13 +33,13 @@ namespace WindowsFormsApp1
         string[] latestComsArray;
         List<string> latestComsList = new List<string>();
         int removalTime = 60;
+        (double, double) homePos = (1.0, 1.0);
 
         string[] property = { };
         //List<Communication> comList = new List<Communication>();
         LinkedList<Communication> comList = new LinkedList<Communication>();
 
-
-
+        [Obsolete]
         public Form1()
         {
             WindowState = FormWindowState.Maximized;
@@ -52,6 +56,7 @@ namespace WindowsFormsApp1
             mapPanel.Controls.Add(cefBrowser);
             cefBrowser.Dock = DockStyle.Fill;
 
+
             ResisterCountry();
             InitializeAllList();
             InitializeCqList();
@@ -61,6 +66,16 @@ namespace WindowsFormsApp1
 
             occarTime = DateTime.Now;
             Form1_SizeChanged(null, null);
+
+        }
+
+        private void Form1_shown(object sender, EventArgs e)
+        {
+            //表示させるフォームを作成する
+            Form2 fm2 = new Form2(this);
+            //フォームを画面の真ん中に表示する
+            fm2.StartPosition = FormStartPosition.CenterScreen;
+            fm2.Show(this);
         }
 
         private void OnBrowserFrameLoadEnd(object sender, FrameLoadEndEventArgs args)
@@ -1254,6 +1269,7 @@ namespace WindowsFormsApp1
         {
             if (isFrom)
             {
+                //グリッドロケータを含む場合
                 if (com.type == 0 || com.type == 15)
                 {
                     string grid = com.message3;
@@ -1261,6 +1277,7 @@ namespace WindowsFormsApp1
                     float ansLat = grid[1] - 65f + 0.1f * float.Parse(grid[3].ToString());
                     double lng = ansLng * 20 - 180 + 1;
                     double lat = ansLat * 10 - 90 + 0.5d;
+                    //グリッドロケータとコールサインが紐づいていた場合
                     if (callsignLocation.ContainsKey(com.message2))
                     {
                         callsignLocation[com.message2] = (lat, lng);
@@ -1269,10 +1286,13 @@ namespace WindowsFormsApp1
                     {
                         callsignLocation.Add(com.message2, (lat, lng));
                     }
+                    //グリッドロケータから算出した緯度経度を戻す
                     return (lat, lng);
                 }
                 else
+                //グリッドロケータを含まない場合
                 {
+                    //グリッドロケータとコールサインが紐づいていた場合
                     if (callsignLocation.ContainsKey(com.message2))
                     {
                         return callsignLocation[com.message2];
@@ -1410,6 +1430,7 @@ namespace WindowsFormsApp1
 
                 (double? fromLat, double? fromLng) = ConvertLatLng(com, true);
                 (double? toLat, double? toLng) = ConvertLatLng(com, false);
+
                 if (fromLat == toLat) toLat += 0.0000001;
                 if (fromLng == toLng) toLng += 0.0000001;
                 if (com.toCountry == "ERROR" || com.fromCountry == "ERROR")
@@ -1425,7 +1446,8 @@ namespace WindowsFormsApp1
                 {
                     if (caller == null)
                     {
-                        cefBrowser.ExecuteScriptAsync("DrawForAllCQ(" + fromLat + " ," + fromLng + " , true, \"" + colorToHome + "\");");
+                        Debug.WriteLine("DrawForAllCQ(" + fromLat + " ," + fromLng + " ,\"" + com.rigName + "\", \"" + colorToHome + "\");");
+                        cefBrowser.ExecuteScriptAsync("DrawForAllCQ(" + fromLat + " ," + fromLng + " ,\"" + com.rigName + "\", \"" + colorToHome + "\");");
                     }
                     else cefBrowser.ExecuteScriptAsync("PointCQ(" + fromLat + ", " + fromLng + ", \"" + colorToHome + "\");");
                 }
@@ -1434,7 +1456,8 @@ namespace WindowsFormsApp1
 
                     if (caller == null)
                     {
-                        cefBrowser.ExecuteScriptAsync("DrawForAll(" + toLat + " ," + toLng + ", " + fromLat + " ," + fromLng + " , true, \"" + colorToHome + "\", \"" + colorActually + "\");");
+                        Debug.WriteLine("DrawForAll(" + toLat + " ," + toLng + ", " + fromLat + " ," + fromLng + " ,\"" + com.rigName + "\", \"" + colorToHome + "\", \"" + colorActually + "\");");
+                        cefBrowser.ExecuteScriptAsync("DrawForAll(" + toLat + " ," + toLng + ", " + fromLat + " ," + fromLng + " ,\"" + com.rigName + "\", \"" + colorToHome + "\", \"" + colorActually + "\");");
                     }
                     else
                     {
@@ -1448,6 +1471,18 @@ namespace WindowsFormsApp1
                         }
                     }
                 }
+                TestRecord testRecord = new TestRecord()
+                {
+                    Date = com.date.ToString(),
+                    FromLat = fromLat,
+                    FromLng = fromLng,
+                    ToLat = toLat,
+                    ToLng = toLng,
+                    ObservedLat = homePos.Item1,
+                    ObservedLng = homePos.Item2,
+                };
+
+                uploadLog(testRecord);
             }
             catch (Exception ex)
             {
@@ -1457,6 +1492,13 @@ namespace WindowsFormsApp1
                     cefBrowser.ExecuteScriptAsync("ClearEntities()");
                 }
             }
+        }
+
+        private void uploadLog(TestRecord testRecord)
+        {
+            var firebase = new FirebaseClient("https://qsoonmap-default-rtdb.asia-southeast1.firebasedatabase.app/");
+            firebase.Child("logs/data1").PostAsync(testRecord);
+            Console.WriteLine(testRecord.ToLng);
         }
 
         public static int CountOf(string target, params string[] strArray)
@@ -1486,7 +1528,7 @@ namespace WindowsFormsApp1
                 //ALL.TXTの読み取りを5回試行する
                 try
                 {
-                    string filePath = "C:\\Users\\" + Environment.UserName + "\\AppData\\Local\\WSJT-X\\ALL.TXT";
+                    string filePath = "C:\\Users\\" + Environment.UserName + "\\AppData\\Local\\WSJT-X - RigVB\\ALL.TXT";
                     Console.WriteLine(filePath + "\n\n");
                     using (FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Read))
                     {
@@ -1501,6 +1543,7 @@ namespace WindowsFormsApp1
 
                             if (fs.CanSeek)
                             {
+                                Console.WriteLine("here1");
                                 int read;
                                 while ((read = fs.ReadByte()) >= 0)
                                 {
@@ -1510,6 +1553,8 @@ namespace WindowsFormsApp1
                                 str = Encoding.GetEncoding("Shift_JIS").GetString(bytes.ToArray());
                                 if (CountOf(str, "\r\n") != param)
                                 {
+                                    Console.WriteLine(str);
+                                    Console.WriteLine(utcNow.AddSeconds(delay - 15));
 
                                     string strTime = str.Trim('\r').Trim('\n').Substring(0, 15);
                                     DateTime candidateTime = new DateTime(
@@ -1521,8 +1566,12 @@ namespace WindowsFormsApp1
                                        int.Parse(strTime.Substring(11, 2)));
                                     if (isFirst)
                                     {
+                                        Console.WriteLine("here3");
+
                                         if (candidateTime < utcNow.AddSeconds(delay - 15))
                                         {
+                                            Console.WriteLine("here4");
+
                                             delay = -15;
                                         }
                                         isFirst = false;
@@ -1530,6 +1579,8 @@ namespace WindowsFormsApp1
 
                                     if (candidateTime < utcNow.AddSeconds(delay - 15) || candidateTime > utcNow.AddSeconds(delay))
                                     {
+                                        Console.WriteLine("here5");
+
                                         break;
                                     }
                                     string temp = string.Copy(str);
@@ -1562,8 +1613,8 @@ namespace WindowsFormsApp1
             //新規に受信した交信があった場合
             while (latestComsList.Count > 0)
             {
+                //Debug.WriteLine(latestComsList[0]);
                 AddComList(latestComsList[0]);
-                clicktimes++;
                 latestComsList.RemoveAt(0);
             }
         }
@@ -1573,6 +1624,7 @@ namespace WindowsFormsApp1
             property = line.Split(new string[] { " ", "　" }, StringSplitOptions.RemoveEmptyEntries);
             int type = -1;
             Communication com = null;
+            //for (int i = 0; i < property.Length; i++) Debug.WriteLine(property[i]);
 
             if (property.Length == 10)
             {
@@ -1599,11 +1651,12 @@ namespace WindowsFormsApp1
                     message1 = property[7],
                     message2 = property[8],
                     message3 = property[9],
+                    rigName = property[3],
                     toCountry = toCountry,
                     fromCountry = fromCountry,
                     mySnr = int.Parse(property[4]),
+                    observersPos = homePos,
                 };
-
             }
             else
             {
@@ -1620,6 +1673,7 @@ namespace WindowsFormsApp1
                     fromCountry = "",
                 };
             }
+            clicktimes++;
             comList.Add(com);
 
             bool isChild;
@@ -1645,8 +1699,6 @@ namespace WindowsFormsApp1
         private void AnalyzeSnr(Communication com)
         {
             string report = com.message3;
-            //int type = com.type;
-            //int snr;
             Communication parent = com;
             if (com.parentId == 0) return;
             switch (com.type)
@@ -1655,7 +1707,6 @@ namespace WindowsFormsApp1
                     com.opSnr = int.Parse(report);
                     while (parent.parentId != 0)
                     {
-                        //Console.WriteLine("30きてるよ！");
                         parent = comList.FindIndex(parent.parentId).Value;
                         if (parent.message2 == com.message1)
                         {
@@ -1669,7 +1720,6 @@ namespace WindowsFormsApp1
                     com.opSnr = int.Parse(report.Substring(1));
                     while (parent.parentId != 0)
                     {
-                        //Console.WriteLine("45きてるよ！");
                         parent = comList.FindIndex(parent.parentId).Value;
                         if (parent.message2 == com.message1)
                         {
@@ -1687,7 +1737,6 @@ namespace WindowsFormsApp1
                 default:
                     while (parent.parentId != 0)
                     {
-                        //Console.WriteLine("defaultきてるよ！" + com.id.ToString() + " parent " + parent.parentId.ToString());
                         parent = comList.FindIndex(parent.parentId).Value;
                         if (parent.message2 == com.message2 && parent.reportedSnr != 100)
                         {
@@ -1876,5 +1925,43 @@ namespace WindowsFormsApp1
             return colorCode;
         }
 
+        private void getDateButton_Click(object sender, EventArgs e)
+        {
+
+            /*
+            string indicatedDate = getDateBox.Text;
+            string line = "";
+            string filePath = "C:\\Users\\" + Environment.UserName + "\\Desktop\\研究\\data\\dataForSeminarSingle.txt";
+            ArrayList al = new ArrayList();
+
+            using (FileStream fs = new FileStream(filePath,
+                FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            {
+                using (TextReader sr = new StreamReader(fs,
+                    Encoding.GetEncoding("shift-jis")))
+                {
+
+                    while ((line = sr.ReadLine()) != null)
+                    {
+                        al.Add(line.Trim('\n').Trim('\r'));
+                    }
+                }
+            }
+            for (int i = 0; i < al.Count; i++)
+            {
+                //Console.WriteLine(al[i]);
+                AddComList(al[i].ToString().Replace("\t", " "));
+            }
+
+            foreach (Communication com in comList)
+            {
+                try
+                {
+                    DrawOnMap(null, com);
+                }
+                catch { }
+            }
+            */
+        }
     }
 }
